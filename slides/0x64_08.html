@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section
+            data-markdown=""
+            data-separator="^\n---$"
+            data-separator-vertical="^\n>>>$">
+          <script type="text/template">
+## 実装して学ぶ型推論
+
+田中　祥太郎
+
+---
+
+Q.
+
+型推論機構が欲しい
+
+と思ったことはありますか？
+
+---
+
+Q.
+
+型推論機構を**実装したい**
+
+と思ったことはありますか？
+
+---
+
+（普通は）ない
+
+---
+
+（自分も）ない
+
+---
+
+大学3年の10月
+
+---
+
+---
+
+1. OCamlでOCamlのインタプリタを実装
+2. できたインタプリタに型推論機構を実装
+
+---
+
+思い出しながら頑張って解説してみます
+
+---
+
+### OCaml
+
+* 関数型言語
+* 副作用を許容
+  * 普通に try ~ with とかある
+* Haskellとの比較
+  * 型システムの表現力は低い（型クラスが無い）
+  * 代わりに型システムの完全性が保証される（）
+*
+
+### 雰囲気
+
+
+
+
+```
+```
+
+
+          </script>
+        </section>
+      </div>
+    </div>
+
+    <script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/marked.js' },
+          { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/markdown.js' },
+          { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true },
+          { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
