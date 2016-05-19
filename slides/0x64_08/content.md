@@ -322,7 +322,7 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 $$
   \frac{
-    \Gamma \vdash e_1 : \tau \; \Gamma \vdash e_2 : \tau
+    \Gamma \vdash e_1 : \tau \qquad \Gamma \vdash e_2 : \tau
   }{
     \Gamma \vdash e_1 + e_2: \tau
   }
