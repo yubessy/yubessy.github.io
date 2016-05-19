@@ -108,7 +108,7 @@ let sum_of_first_two l =
 
 インタプリタ
 
-1. 構文木の
+1. 構文木の生成
 2. 評価
 3. 結果の出力
 
@@ -125,7 +125,7 @@ let sum_of_first_two l =
 
 構文定義: syntax.ml #1
 
-```
+```ocaml
 type id = string
 
 type binOp = Plus | Minus | Mult | Div | Mod | Lt | Le | Mt | Me | Eq | Ne | BoolOr | BoolAnd
@@ -137,7 +137,7 @@ type unOp = Neg | BoolNot
 
 構文定義: syntax.ml #2
 
-```
+```ocaml
 type exp =
     Var of id
   | ILit of int
@@ -156,7 +156,9 @@ type program =
   | RecDecl of id * id * exp
 ```
 
--- 評価
+---
+
+評価
 
 * 環境渡しインタプリタ
   * 環境の下で、抽象構文木で表現された式を計算
@@ -248,7 +250,7 @@ let rec eval_exp env = function
 
 * 三項演算子 `if exp1 then exp2 else exp3`
 
-```
+```ocaml
   | ...
   | IfExp (exp1, exp2, exp3) ->
       let test = eval_exp env exp1 in
@@ -266,7 +268,7 @@ let rec eval_exp env = function
 * let式 `let id = exp1 in exp2`
 * 変数束縛を追加した新たな環境の中で式を評価
 
-```
+```ocaml
   | ...
   | LetExp (id, exp1, exp2) ->
       let value = eval_exp env exp1 in
@@ -282,7 +284,7 @@ let rec eval_exp env = function
 * 環境への参照を持つことで関数閉包（クロージャ）を実現 `ProcV`
 * 関数適用の際はクロージャがもつ環境をextendした中で評価
 
-```
+```ocaml
   | ...
   | FunExp (para, exp) -> ProcV (para, exp, ref env)
   | AppExp (exp1, exp2) ->
@@ -303,7 +305,7 @@ let rec eval_exp env = function
 * 再帰的関数定義（exp1の中でidが出現する）
 * 一時的に空の環境をダミーとして参照し、評価時に付け替える
 
-```
+```ocaml
   | ...
   | LetRecExp (id, para, exp1, exp2) ->
       let dummyenv = ref Environment.empty in
@@ -318,7 +320,7 @@ let rec eval_exp env = function
 
 * 宣言
 
-```
+```ocaml
 let eval_decl env = function
     Exp exp ->
       let value = eval_exp env exp in ("-", env, value)
