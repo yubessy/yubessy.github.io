@@ -354,3 +354,9 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 ---
 
 第n夜をお楽しみに！
+
+---
+
+参考（というかシラバス）
+
+http://www.fos.kuis.kyoto-u.ac.jp/~t-sekiym/classes/isle4/
