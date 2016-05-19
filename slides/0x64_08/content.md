@@ -1,34 +1,46 @@
-# 実装して学ぶ型推論
+# 実装して学ぶ関数型言語
 
 田中　祥太郎
 
 ---
 
-Q.
-
-型推論機構が欲しい
-
-と思ったことはありますか？
+お詫び
 
 ---
 
-（普通は）ある
+当初の題目
+
+「実装して学ぶ型推論」
 
 ---
 
-Q.
-
-型推論機構を**実装したい**
-
-と思ったことはありますか？
+1. OCamlでOCamlの対話型インタプリタ（REPL）を実装
+2. できたインタプリタに型推論機構を付与
 
 ---
 
-（普通は）ない
+# FP無関係
 
 ---
 
-（自分も）ない
+# ていうか無理
+
+---
+
+1. OCamlでOCamlの対話型インタプリタ（REPL）を実装
+2. ~~できたインタプリタに型推論機構を付与~~
+
+---
+
+後半は
+
+*x64物語 第n夜 「型」*
+
+をお楽しみに
+
+---
+
+〜本編〜
 
 ---
 
@@ -40,36 +52,13 @@ Q.
 
 ---
 
-思い出しながら頑張って解説してみます
-
----
-
-型推論を実装するために必要なもの
-
-* 型推論のないインタプリタ or コンパイラ
-
----
-
-その辺に落ちてない
-
----
-
-作る
-
----
-
-土台から作る
-
----
-
 型推論を実装するために
 
-**型推論のないインタプリタを作る**
+**まずOCamlのインタプリタを自作**
 
 ---
 
-1. OCamlでOCamlの対話型インタプリタ（REPL）を実装
-2. できたインタプリタに型推論機構を付与
+思い出しながら頑張って解説してみます
 
 ---
 
@@ -299,7 +288,7 @@ let eval_decl env = function
 
 ---
 
-インタプリタができた！！！
+できた！！！
 
 ---
 
@@ -307,11 +296,7 @@ let eval_decl env = function
 
 ---
 
-（ここまで下準備）
-
----
-
-型推論はまだない
+型推論はついてない
 
 ```
 # 1 + true;;
@@ -320,78 +305,4 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 ---
 
-型推論に関する数学的定義
-
-* 型環境 $\quad \Gamma$
-  * 変数に対して仮定する型の情報
-* 型判断 $\quad \Gamma \vdash e : \tau$
-  * 型環境 $\Gamma$ の下で式 $e$ は型 $\tau$ をもつ
-* 型付け規則
-
-$$
-  \frac{
-    \Gamma \vdash e_1 : \tau \qquad \Gamma \vdash e_2 : \tau
-  }{
-    \Gamma \vdash e_1 + e_2: \tau
-  }
-$$
-
----
-
-型推論
-
-* 入力: 型環境 $\Gamma$ と式 $e$
-* 出力: $\Gamma \vdash e : \tau$ となるような型 $\tau$
-
----
-
-main.ml に型推論を組み込む
-
-```ocaml
-open Syntax
-open Eval
-open Typing (* new *)
-
-let rec read_eval_print env tyenv = (* 型環境を受け取る *)
-  print_string "# ";
-  flush stdout;
-  let decl = Parser.toplevel Lexer.main (Lexing.from_channel stdin) in
-  let (newtyenv, ty) = ty_decl tyenv decl in (* 型推論！！！ *)
-  let (id, newenv, v) = eval_decl env decl in
-    Printf.printf "val %s : " id;
-    pp_ty ty;
-    print_string " = ";
-    pp_val v;
-    print_newline();
-    read_eval_print newenv newtyenv
-
-let _ = read_eval_print Environment.empty
-```
-
----
-
-型推論アルゴリズム #1
-
-* 型付け規則を逆に読むことで型推論アルゴリズムが得られる
-
-$$
-  \frac{
-    \Gamma \vdash e_1 : \tau \qquad \Gamma \vdash e_2 : \tau
-  }{
-    \Gamma \vdash e_1 + e_2: \tau
-  }
-$$
-
-```
-let ty_prim_binOp op ty1 ty2 = match op with
-    Plus -> ([(ty1, TyInt); (ty2, TyInt)], TyInt)
-  | ...
-```
-
----
-
-型推論アルゴリズム #2
-
-* let
-
----
+第n夜をお楽しみに！
