@@ -335,9 +335,12 @@ let eval_decl env = function
 
 できた！！！
 
----
-
-# デモ
+```
+# let rec fact n = if n = 1 then 1 else n * fact (n - 1);;
+val a = <fun>
+# fact 5
+val - = 120;;
+```
 
 ---
 
