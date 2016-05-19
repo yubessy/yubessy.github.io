@@ -249,8 +249,7 @@ let rec eval_exp env = function
 * 三項演算子 `if exp1 then exp2 else exp3`
 
 ```
-let rec eval_exp env = function
-    ...
+  | ...
   | IfExp (exp1, exp2, exp3) ->
       let test = eval_exp env exp1 in
         (match test with
@@ -272,28 +271,16 @@ let rec eval_exp env = function
   | LetExp (id, exp1, exp2) ->
       let value = eval_exp env exp1 in
         eval_exp (Environment.extend id value env) exp2
+  | ...
 ```
 
 ---
 
 評価: eval.ml #5
 
-* let rec式 `let rec id para = exp1 in exp2`
-* 再帰的関数定義（exp1の中で）
-
-```
-
-  | LetRecExp (id, para, exp1, exp2) ->
-      let dummyenv = ref Environment.empty in
-      let newenv = Environment.extend id (ProcV (para, exp1, dummyenv)) env in
-        dummyenv := newenv;
-        eval_exp newenv exp2
-  | ...
-```
-
----
-
-評価: eval.ml #4
+* 関数と関数適用
+* 環境への参照を持つことで関数閉包（クロージャ）を実現 `ProcV`
+* 関数適用の際はクロージャがもつ環境をextendした中で評価
 
 ```
   | ...
@@ -311,6 +298,25 @@ let rec eval_exp env = function
 ---
 
 評価: eval.ml #5
+
+* let rec式 `let rec id para = exp1 in exp2`
+* 再帰的関数定義（exp1の中でidが出現する）
+* 一時的に空の環境をダミーとして参照し、評価時に付け替える
+
+```
+  | ...
+  | LetRecExp (id, para, exp1, exp2) ->
+      let dummyenv = ref Environment.empty in
+      let newenv = Environment.extend id (ProcV (para, exp1, dummyenv)) env in
+        dummyenv := newenv;
+        eval_exp newenv exp2
+  | ...
+```
+---
+
+評価: eval.ml #6
+
+* 宣言
 
 ```
 let eval_decl env = function
