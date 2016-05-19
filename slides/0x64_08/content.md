@@ -1,4 +1,4 @@
-# 実装して学ぶ関数型言語
+# 実装 関数型言語
 
 田中　祥太郎
 
@@ -10,7 +10,7 @@
 
 当初の題目
 
-「実装して学ぶ型推論」
+「実装 型推論」
 
 ---
 
@@ -34,9 +34,9 @@
 
 後半は
 
-*x64物語 第n夜 「型」*
+**0x64物語 第n夜 「型」**
 
-をお楽しみに
+をお楽しみに！
 
 ---
 
@@ -54,11 +54,11 @@
 
 型推論を実装するために
 
-**まずOCamlのインタプリタを自作**
+**まずOCamlのインタプリタを実装**
 
 ---
 
-思い出しながら頑張って解説してみます
+思い出しながら頑張って解説します
 
 ---
 
@@ -80,27 +80,87 @@ OCaml
 
 ```ocaml
 let rec fact n =
-  if n = 0 then 1 else n * fact (n-1);;
+  if n = 0 then 1 else n * fact (n-1)
 
-fact 5;;
+fact 5
 
 let sum_of_first_two l =
   match l with
       [] -> 0
     | x :: [] -> x
-    | x :: y :: rest -> x + y;;
+    | x :: y :: rest -> x + y
 ```
+
+---
+
+今回
+
+* OCamlのサブセットminimlを実装
+  * int, bool
+  * 単項・二項・三項演算
+  * let, let rec
+  * 関数
+* インタプリタ
+  * 環境渡しインタプリタ
+  * REPLをつくる
 
 ---
 
 インタプリタ
 
+1. 構文木の
+2. 評価
+3. 結果の出力
+
+---
+
+構文木の生成
+
+* ソースコード -> 抽象構文木
+* 字句解析: ocamllex
+* 構文解析: ocamlyacc
+* 今回は構文定義だけ紹介します
+
+---
+
+構文定義: syntax.ml #1
+
+```
+type id = string
+
+type binOp = Plus | Minus | Mult | Div | Mod | Lt | Le | Mt | Me | Eq | Ne | BoolOr | BoolAnd
+
+type unOp = Neg | BoolNot
+```
+
+---
+
+構文定義: syntax.ml #2
+
+```
+type exp =
+    Var of id
+  | ILit of int
+  | BLit of bool
+  | UnOp of unOp * exp
+  | BinOp of binOp * exp * exp
+  | IfExp of exp * exp * exp
+  | LetExp of id * exp * exp
+  | LetRecExp of id * id * exp * exp
+  | FunExp of id * exp
+  | AppExp of exp * exp
+
+type program =
+    Exp of exp
+  | Decl of id * exp
+  | RecDecl of id * id * exp
+```
+
+-- 評価
+
 * 環境渡しインタプリタ
-  1. 入力文字列の読み込み・構文解析
-  2. 解釈
-  3. 結果の出力
+  * 環境の下で、抽象構文木で表現された式を計算
 * 環境: 変数束縛のリスト
-* 解釈: 環境の下で抽象構文木で表現された式を評価
 
 ---
 
@@ -117,19 +177,11 @@ let extend x v env = (x,v) :: env
 
 let rec lookup x env =
   try List.assoc x env with Not_found -> raise Not_bound
-
-let rec map f = function
-    []              -> []
-  | (id, v) :: rest -> (id, f v) :: map f rest
-
-let rec fold_right f env a = match env with
-    []             -> a
-  | (_, v) :: rest -> f v (fold_right f rest a)
 ```
 
 ---
 
-REPL: main.ml
+インタプリタ: main.ml
 
 ```ocaml
 open Syntax
@@ -150,50 +202,11 @@ let _ = read_eval_print Environment.empty
 
 ---
 
-構文定義: syntax.ml
-
-```
-type id = string
-
-type binOp = Plus | Minus | Mult | Div | Mod | Lt | Le | Mt | Me | Eq | Ne | BoolOr | BoolAnd
-
-type unOp = Neg | BoolNot
-
-type exp =
-    Var of id
-  | ILit of int
-  | BLit of bool
-  | UnOp of unOp * exp
-  | BinOp of binOp * exp * exp
-  | IfExp of exp * exp * exp
-  | LetExp of id * exp * exp
-  | LetRecExp of id * id * exp * exp
-  | FunExp of id * exp
-  | AppExp of exp * exp
-
-type program =
-    Exp of exp
-  | Decl of id * exp
-  | RecDecl of id * id * exp
-```
-
----
-
 評価: eval.ml #1
 
+* 単項・二項演算
+
 ```ocaml
-open Syntax
-
-type exval =
-    IntV of int
-  | BoolV of bool
-  | ProcV of id * exp * dnval Environment.t ref
-and dnval = exval
-
-exception Error of string
-
-let err s = raise (Error s)
-
 let rec apply_prim_unOp op arg = match op, arg with
     Neg, IntV i      -> IntV (- i)
   | Neg, _           -> err ("An argument must be integer: -")
@@ -210,6 +223,8 @@ let rec apply_prim_binOp op arg1 arg2 = match op, arg1, arg2 with
 
 評価: eval.ml #2
 
+* 変数, リテラル, 単項・二項演算式
+
 ```ocaml
 let rec eval_exp env = function
     Var x ->
@@ -224,6 +239,18 @@ let rec eval_exp env = function
       let arg1 = eval_exp env exp1 in
       let arg2 = eval_exp env exp2 in
         apply_prim_binOp op arg1 arg2
+  | ...
+```
+
+---
+
+評価: eval.ml #3
+
+* 三項演算子 `if exp1 then exp2 else exp3`
+
+```
+let rec eval_exp env = function
+    ...
   | IfExp (exp1, exp2, exp3) ->
       let test = eval_exp env exp1 in
         (match test with
@@ -235,17 +262,30 @@ let rec eval_exp env = function
 
 ---
 
-評価: eval.ml #3
+評価: eval.ml #4
+
+* let式 `let id = exp1 in exp2`
+* 変数束縛を追加した新たな環境の中で式を評価
 
 ```
   | ...
   | LetExp (id, exp1, exp2) ->
       let value = eval_exp env exp1 in
         eval_exp (Environment.extend id value env) exp2
+```
+
+---
+
+評価: eval.ml #5
+
+* let rec式 `let rec id para = exp1 in exp2`
+* 再帰的関数定義（exp1の中で）
+
+```
+
   | LetRecExp (id, para, exp1, exp2) ->
       let dummyenv = ref Environment.empty in
-      let newenv =
-        Environment.extend id (ProcV (para, exp1, dummyenv)) env in
+      let newenv = Environment.extend id (ProcV (para, exp1, dummyenv)) env in
         dummyenv := newenv;
         eval_exp newenv exp2
   | ...
