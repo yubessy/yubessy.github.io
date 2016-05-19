@@ -312,15 +312,18 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 ---
 
-型に関する数式定義
+型推論に関する数学的定義
 
-* $\Gamma$ :型環境
+* 型環境 $\Gamma$
   * 変数に対して仮定する型の情報
-  * $\Gamma (x) = int$
-* 型判断
-  * 式 $e$ が型 $\tau$ をもつ
-*
+* 型判断 $\Gamma \vdash e : \tau$
+  * 型環境 $\Gamma$ の下で式 $e$ は型 $\tau$ をもつ
+* 型付け規則
 
 $$
-  F(u) = \int_{-\infty}^{\infty} f(x)\mathrm{e}^{-j2\pi ux}dx
+  \frac{
+    \Gamma \vdash e_1 : \tau
+  }{
+    \Gamma \vdash e_1 + e_2: \tau
+  }
 $$
