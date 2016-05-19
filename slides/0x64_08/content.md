@@ -312,7 +312,14 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 ---
 
-型推論
+型に関する数式定義
+
+* $\Gamma$ :型環境
+  * 変数に対して仮定する型の情報
+  * $\Gamma (x) = int$
+* 型判断
+  * 式 $e$ が型 $\tau$ をもつ
+*
 
 $$
   F(u) = \int_{-\infty}^{\infty} f(x)\mathrm{e}^{-j2\pi ux}dx
