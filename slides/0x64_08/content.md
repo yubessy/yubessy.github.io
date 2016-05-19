@@ -300,3 +300,20 @@ let eval_decl env = function
 ---
 
 （ここまで下準備）
+
+---
+
+型推論はまだない
+
+```
+# 1 + true;;
+Fatal error: exception Eval.Error("Both arguments must be integer: +")
+```
+
+---
+
+型推論
+
+$$
+  F(u) = \int_{-\infty}^{\infty} f(x)\mathrm{e}^{-j2\pi ux}dx
+$$
