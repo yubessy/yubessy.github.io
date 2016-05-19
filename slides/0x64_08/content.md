@@ -36,6 +36,10 @@ Q.
 
 ---
 
+
+
+---
+
 思い出しながら頑張って解説してみます
 
 ---
@@ -299,6 +303,10 @@ let eval_decl env = function
 
 ---
 
+# デモ
+
+---
+
 （ここまで下準備）
 
 ---
@@ -314,9 +322,9 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 型推論に関する数学的定義
 
-* 型環境 $\Gamma$
+* 型環境 $\quad \Gamma$
   * 変数に対して仮定する型の情報
-* 型判断 $\Gamma \vdash e : \tau$
+* 型判断 $\quad \Gamma \vdash e : \tau$
   * 型環境 $\Gamma$ の下で式 $e$ は型 $\tau$ をもつ
 * 型付け規則
 
@@ -327,3 +335,63 @@ $$
     \Gamma \vdash e_1 + e_2: \tau
   }
 $$
+
+---
+
+型推論
+
+* 入力: 型環境 $\Gamma$ と式 $e$
+* 出力: $\Gamma \vdash e : \tau$ となるような型 $\tau$
+
+---
+
+main.ml に型推論を組み込む
+
+```ocaml
+open Syntax
+open Eval
+open Typing (* new *)
+
+let rec read_eval_print env tyenv = (* 型環境を受け取る *)
+  print_string "# ";
+  flush stdout;
+  let decl = Parser.toplevel Lexer.main (Lexing.from_channel stdin) in
+  let (newtyenv, ty) = ty_decl tyenv decl in (* 型推論！！！ *)
+  let (id, newenv, v) = eval_decl env decl in
+    Printf.printf "val %s : " id;
+    pp_ty ty;
+    print_string " = ";
+    pp_val v;
+    print_newline();
+    read_eval_print newenv newtyenv
+
+let _ = read_eval_print Environment.empty
+```
+
+---
+
+型推論アルゴリズム #1
+
+* 型付け規則を逆に読むことで型推論アルゴリズムが得られる
+
+$$
+  \frac{
+    \Gamma \vdash e_1 : \tau \qquad \Gamma \vdash e_2 : \tau
+  }{
+    \Gamma \vdash e_1 + e_2: \tau
+  }
+$$
+
+```
+let ty_prim_binOp op ty1 ty2 = match op with
+    Plus -> ([(ty1, TyInt); (ty2, TyInt)], TyInt)
+  | ...
+```
+
+---
+
+型推論アルゴリズム #2
+
+* let
+
+---
