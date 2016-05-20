@@ -301,7 +301,7 @@ let rec eval_exp env = function
 
 ---
 
-評価: eval.ml #5
+評価: eval.ml #6
 
 * let rec式 `let rec id para = exp1 in exp2`
 * 再帰的関数定義（exp1の中でidが出現する）
@@ -319,7 +319,7 @@ let rec eval_exp env = function
 
 ---
 
-評価: eval.ml #6
+評価: eval.ml #7
 
 * 宣言
 
