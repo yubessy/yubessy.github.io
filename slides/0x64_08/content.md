@@ -1,6 +1,15 @@
 # 実装 関数型言語
 
-田中　祥太郎
+0x64物語 第08夜 "Functional Programming"
+
+Shotaro Tanaka
+
+---
+
+Disclaimer
+
+* 社内勉強会用資料です
+* 内容には責任を持ちません
 
 ---
 
