@@ -101,11 +101,11 @@ fun x -> x + 1
 
 定義
 
-* $e$ $\cdots$ 式
-  * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $$  
+* $e$ : 式
+  * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $  
     $ \quad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $
-  * $x$ $\cdots$ 変数, $n$ $\cdots$ 整数, $b$ $\cdots$ 真理値, $\rm op$ $\cdots$ 二項演算子
-* $\gamma$ $\cdots$ 型
+  * $x$ : 変数, $n$ : 整数, $b$ : 真理値, $\rm op$ : 二項演算子
+* $\gamma$ : 型
   * $ \gamma := \alpha \, \mid \, {\rm int} \, \mid \, {\rm bool} \, \mid \, \gamma_1 \rightarrow \gamma_2 $
   * $\alpha$ $\cdots$ 型変数
 
