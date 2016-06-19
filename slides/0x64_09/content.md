@@ -101,34 +101,21 @@ fun x -> x + 1
 
 定義
 
-$$ 式 \; e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $$
-$$ \quad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $$
-
-$x$ : 変数, $n$ : 整数, $b$ : 真理値, $op$ : 二項演算子
-
-$$ 型 \; \gamma := \alpha \, \mid \, int \, \mid \, bool \, \mid \, \gamma_1 \rightarrow \gamma_2 $$
-
----
-
-$$
-式 e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3
-
-      \| fun x -> e \| e1 e2 \\
-x: 変数 \\
-n: 整数 \\
-b: 真理値 \\
-op: 2項演算子 \\
-型 \gamma ::= \alpha \| int \| bool \| \gamma_1 \arrow \gamma_2 \\
-\alpha: 型変数
-$$
+* $e$ $\cdots$ 式
+  * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $$  
+    $ \quad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $
+  * $x$ $\cdots$ 変数, $n$ $\cdots$ 整数, $b$ $\cdots$ 真理値, $\rm op$ $\cdots$ 二項演算子
+* $\gamma$ $\cdots$ 型
+  * $ \gamma := \alpha \, \mid \, {\rm int} \, \mid \, {\rm bool} \, \mid \, \gamma_1 \rightarrow \gamma_2 $
+  * $\alpha$ $\cdots$ 型変数
 
 ---
 
 定義（つづき）
 
-* **型環境** $\Gamma$ : 変数に対して仮定する型に関する情報を保持
-  * 変数から型への部分関数とみなせる
-  * $\Gamma(x) = int$ のとき x の型は int
+* $\Gamma$ : **型環境**
+  * 変数に対して仮定する型の情報（変数から型への部分関数）
+  * $\Gamma(x) = {\rm int}$ のとき x の型は int
 * $e : \gamma$ 式 $e$ が型 $\gamma$ をもつという **型判断**
 * 型付け規則
 
