@@ -102,7 +102,8 @@ fun x -> x + 1
 定義
 
 $$
-式 e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3 \\
+式 e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3
+
       \| fun x -> e \| e1 e2 \\
 x: 変数 \\
 n: 整数 \\
