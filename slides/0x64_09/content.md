@@ -102,14 +102,13 @@ fun x -> x + 1
 定義
 
 $$
-e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3
-      \| fun x -> e \| e1 e2
-
-x: 変数
-n: 整数
-b: 真理値
-op: 2項演算子
-型 \gamma ::= \alpha | int | bool | \gamma_1 \allow \gamma_2
+式 e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3 \\
+      \| fun x -> e \| e1 e2 \\
+x: 変数 \\
+n: 整数 \\
+b: 真理値 \\
+op: 2項演算子 \\
+型 \gamma ::= \alpha \| int \| bool \| \gamma_1 \arrow \gamma_2 \\
 \alpha: 型変数
 $$
 
