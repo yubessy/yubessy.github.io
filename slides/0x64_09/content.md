@@ -101,25 +101,25 @@ fun x -> x + 1
 
 定義
 
-* $e$ : 式
+* $e$ 式
   * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $  
     $ \qquad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $
-  * $x$ : 変数, $n$ : 整数, $b$ : 真理値, $\rm op$ : 二項演算子
-* $\gamma$ : 型
+  * $x$ 変数, $n$ 整数, $b$ 真理値, $\rm op$ 二項演算子
+* $\gamma$ 型
   * $ \gamma := \alpha \, \mid \, {\rm int} \, \mid \, {\rm bool} \, \mid \, \gamma_1 \rightarrow \gamma_2 $
-  * $\alpha$ : 型変数
-* $e : \gamma$ : 型判断（式 $e$ は型 $\gamma$ をもつ）
+  * $\alpha$ 型変数
+* $e : \gamma$ 型判断（式 $e$ は型 $\gamma$ をもつ）
 
 ---
 
 定義（つづき）
 
-* $\Gamma$ : **型環境**
+* $\Gamma$ 型環境
   * 変数に対して仮定する型の情報
   * 変数から型への部分関数
   * 実装上は (変数, 型) のリスト
   * $\Gamma(x) = {\rm int}$ のとき $x : {\rm int}$
-* $\Gamma \vdash e : \gamma$ : 型環境 $\Gamma$ のもとで式 $e$ は型 $\gamma$ をもつ
+* $\Gamma \vdash e : \gamma$ 型環境 $\Gamma$ のもとで式 $e$ は型 $\gamma$ をもつ
 * 型付け規則
 
 $$
