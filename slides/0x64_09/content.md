@@ -102,6 +102,15 @@ fun x -> x + 1
 定義
 
 $$
+\begin{equation*}
+  e := x \| n \| b \| e_1 \mathrm{op} e_2 \| \mathrm{if} e_1 \mathrm{then} e_2 \mathrm{else} e_3 \\
+       \| fun x \arrow e \| e1 e2
+\end{equation*}
+$$
+
+---
+
+$$
 式 e ::= x \| n \| b \| e_1 op e_2 \| if e_1 then e_2 else e_3
 
       \| fun x -> e \| e1 e2 \\
