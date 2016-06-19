@@ -101,8 +101,8 @@ fun x -> x + 1
 
 定義
 
-$$ e := x \mid n \mid b \mid e_1 \rm{op} e_2 \mid \rm{if} e_1 \rm{then} e_2 \rm{else} e_3 $$
-$$ e := \rm{fun} x \rightarrow e \mid e_1 e_2 $$
+$$ e := x \mid n \mid b \mid e_1 \, \rm{op} \, e_2 \mid \rm{if} \, e_1 \, \rm{then} \, e_2 \, \rm{else} e_3 $$
+$$ \qquad \mid \rm{fun} \, x \rightarrow e \mid e_1 \; e_2 $$
 
 ---
 
