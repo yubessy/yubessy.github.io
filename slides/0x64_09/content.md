@@ -101,12 +101,10 @@ fun x -> x + 1
 
 定義
 
-```
-$$
+\[
 e := x \| n \| b \| e_1 \mathrm{op} e_2 \| \mathrm{if} e_1 \mathrm{then} e_2 \mathrm{else} e_3 \\
      \| fun x \arrow e \| e1 e2
-$$
-```
+\]
 
 ---
 
