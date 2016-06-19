@@ -95,14 +95,18 @@ fun x -> x + 1
 
 ---
 
-ちゃんと（コンピュータにできるように）やる
+ちゃんと（コンピュータにわかるように）やる
 
 ---
 
 定義
 
-$$ e := x \mid n \mid b \mid e_1 \, \rm{op} \, e_2 \mid \rm{if} \, e_1 \, \rm{then} \, e_2 \, \rm{else} e_3 $$
-$$ \qquad \mid \rm{fun} \, x \rightarrow e \mid e_1 \; e_2 $$
+$$ 式 \; e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $$
+$$ \quad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $$
+
+$x$ : 変数, $n$ : 整数, $b$ : 真理値, $op$ : 二項演算子
+
+$$ 型 \; \gamma := \alpha \, \mid \, int \, \mid \, bool \, \mid \, \gamma_1 \rightarrow \gamma_2 $$
 
 ---
 
