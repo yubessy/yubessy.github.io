@@ -19,16 +19,24 @@ Disclaimer
 
 OCamlでOCaml（のサブセット言語）のREPLを実装
 
-```
-TODO
+```text
+# let rec fact n = if n <= 1 then 1 else n * fact(n - 1);;
+val fact = <fun>
+
+# fact(10);;
+val - = 3628800
 ```
 
 ---
 
 静的な型システムはまだない
 
-```
-TODO
+```text
+# let f x = 1 + true;;
+val f = <fun>
+
+# f 1;;
+Fatal error: exception Eval.Error("Both arguments must be integer: +")
 ```
 
 ---
@@ -52,34 +60,34 @@ TODO
 
 プリミティブ演算の型推論
 
-```
-1;;
-1: int
+```text
+# 1;;
+val - : int = 1
 
-1 > 0;;
-true: bool
-```
-
----
-
-構文木をたどればできる
-
+# 1 > 0;;
+val - : bool = true
 ```
 
-```
+* 構文木をたどればできそう
 
 ---
 
 関数定義の型推論
 
+```text
+# fun x -> x + 1;;
+val - : ???
 ```
-fun x -> x + 1
--: ?
-```
+
+* 簡単ではない
 
 ---
 
 人間の思考
+
+```ocaml
+fun x -> x + 1
+```
 
 1. `1` は `int`
 2. `+` は `int -> int -> int` だから `x + 1` は `int`
@@ -135,6 +143,11 @@ $$
 プリミティブ演算の型付け規則
 
 $$
+\frac{
+  \Gamma \vdash e_1 : {\rm int} \quad \Gamma \vdash e_2 : {\rm int}
+}{
+  \Gamma \vdash e_1 + e_2 : {\rm int}
+}
 $$
 
 * 型付け規則がそのまま型推論アルゴリズムとなる
@@ -144,8 +157,15 @@ $$
 関数定義の型付け規則
 
 $$
+\frac{
+  \Gamma \vdash e_1 : {\rm int} \quad \Gamma \vdash e_2 : {\rm int}
+}{
+  \rm{fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
+}
 $$
 
+* "関数本体の式 $e$ が、引数 $x$ が型 $\gamma_1$ を持つという仮定の下で型 $\gamma_2$　を持つならば、  
+  $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
 * そのままでは型推論に使えない
 
 ---
