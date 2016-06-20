@@ -111,7 +111,7 @@ fun x -> x + 1
 
 * $e\;$ 式
   * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $  
-    $ \qquad \mid \, \rm{fun} \; x \rightarrow e \mid e_1 \; e_2 $
+    $ \qquad \mid \, {\rm fun} \; x \rightarrow e \mid e_1 \; e_2 $
   * $x\;$ 変数, $n\;$ 整数, $b\;$ 真理値, $\rm op\;$ 二項演算子
 * $\gamma\;$ 型
   * $ \gamma := \alpha \, \mid \, {\rm int} \, \mid \, {\rm bool} \, \mid \, \gamma_1 \rightarrow \gamma_2 $
@@ -160,7 +160,7 @@ $$
 \frac{
   \Gamma , x : \gamma_1 \vdash e : \gamma_2
 }{
-  \Gamma \vdash \rm{fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
+  \Gamma \vdash {\rm fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
 }
 $$
 
