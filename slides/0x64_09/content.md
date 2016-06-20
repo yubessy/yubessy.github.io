@@ -107,7 +107,7 @@ fun x -> x + 1
 
 ---
 
-定義
+式・型・型判断
 
 * $e\;$ 式
   * $ e := x \mid n \mid b \mid e_1 \, {\rm op} \, e_2 \mid {\rm if} \, e_1 \, {\rm then} \, e_2 \, {\rm else} \, e_3 $  
@@ -120,12 +120,12 @@ fun x -> x + 1
 
 ---
 
-定義（つづき）
+型環境・型付け規則
 
 * $\Gamma\;$ 型環境
   * 変数に対して仮定する型の情報
   * 変数から型への部分関数
-  * 実装上は (変数, 型) のリスト
+  * 実装上は (変数, 型) ペアのリスト
   * $\Gamma(x) = {\rm int}$ のとき $x : {\rm int}$
 * $\Gamma \vdash e : \gamma\;$ 型環境 $\Gamma$ のもとで式 $e$ は型 $\gamma$ をもつ
 * 型付け規則
@@ -164,8 +164,9 @@ $$
 }
 $$
 
-* "関数本体の式 $e$ が、引数 $x$ が型 $\gamma_1$ を持つという仮定の下で型 $\gamma_2$ を持つならば、 $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
-* そのままでは型推論に使えない
+* "関数本体 $e$ が、引数 $x$ が型 $\gamma_1$ を持つという仮定の下で型 $\gamma_2$ を持つならば、 $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
+* $e$ の型を推論する際に $x$ の型が必要となるが、 $x$ の型は未知
+* → 単純な推論ができない
 
 ---
 
@@ -179,6 +180,48 @@ $$
 ---
 
 型代入
+
+* $\mathcal{S} \;$ 型代入
+  * 型変数とその型の対応関係
+  * 実装上は (型変数, 型) ペアのリスト
+* $\mathcal{S} \gamma \;$ 型 $\gamma$ に含まれる型変数を全て $\mathcal{S}$ によって置き換えた型 
+* $\mathcal{S} \Gamma \;$ 型環境 $\Gamma$ に現れる型の全てに $\mathcal{S}$ を適用して得られる型環境
+
+---
+
+型推論アルゴリズムの入力と出力
+
+* 入力: 型環境 $\Gamma$ と式 $e$
+* 出力: $\mathcal{S} \Gamma \vdash e : \gamma$ を結論とする型判断が存在するような $\mathcal{S}$ と $\gamma$
+
+---
+
+型推論アルゴリズムがやること
+
+* 型推論の各ステップでは型の等式が得られる
+
+```
+fun x -> x + 1
+```
+
+$$
+\frac{
+  \Gamma \vdash e_1 : {\rm int} \quad \Gamma \vdash e_2 : {\rm int}
+}{
+  \Gamma \vdash e_1 + e_2 : {\rm int}
+} , \frac{
+  \Gamma , x : \gamma_1 \vdash e : \gamma_2
+}{
+  \Gamma \vdash {\rm fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
+}
+$$
+
+---
+
+単一化
+
+* これを **単一化** と呼ぶ
+* 型推論アルゴリズムは連立方程式を解いている
 
 ---
 
