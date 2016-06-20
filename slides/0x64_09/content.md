@@ -198,7 +198,7 @@ $$
 
 型推論アルゴリズムの動作例
 
-式 ${\rm fun} \; x \rightarrow x + 1$ の場合
+式 `fun x -> x + 1` の場合
 
 $$
 \frac{
@@ -214,27 +214,75 @@ $$
 
 1. $x$ の型を $\alpha$ とおく
 2. $x + 1$ の両項の型 $\alpha$ , ${\rm int}$ を得る
-3. $x + 1$ の型 ${\rm int}$ と $(\alpha, {\rm int})$ という制約を得る
+3. $x + 1$ の型 ${\rm int}$ と $(\alpha, \, {\rm int})$ という制約を得る
   * $(\alpha, {\rm int}) \;$ $\alpha$ と ${\rm int}$ が同じ型を持つ  
-4. **単一化** により上記の制約を満たす型代入 $\alpha \mapsto {\rm int}$ を得る
+4. **単一化** により制約を満たす型代入 $[ \alpha \mapsto {\rm int} ]$ を得る
 
 ---
 
 なぜ単一化が必要か
 
-* 3. で「『・・・』という制約を得る」と言ったのは？
-  * 3. で直接型代入 $\alpha \mapsto {\rm int}$ を得ることができないのはなぜ？
+* 3で「『・・・』という制約を得る」と言ったのはなぜ？
+  * 即座に「型代入 $[ \alpha \mapsto {\rm int} ]$ を得る」とは言えないのか？
 * → 型付け規則からはあくまで **制約** しか得られない
-  * 式によっては $(\alpha \rightarrow bool , {\rm int} \rightarrow \beta \rightarrow \beta)$ といった制約が得られることもある
+  * $(\alpha \rightarrow bool, \, {\rm int} \rightarrow \beta \rightarrow \beta)$ のような  左辺が単一の型変数とならない制約が得られることもある
 * 制約から型代入を導くのが単一化
   * 制約は「方程式」
   * 型代入は「方程式の解」
+  * 単一化は「方程式を解く作業」
 
 ---
 
-単一化アルゴリズム
+単一化の形式的定義
+
+与えられた制約の集合
+
+$$
+{(\gamma_1x, \gamma_1y), (\gamma_2x, \gamma_2y), (\gamma_nx, \gamma_ny)}
+$$
+
+に対して、
+
+$$
+\mathcal{S} \gamma_1x = \mathcal{S} \gamma_1y, \mathcal{S} \gamma_2x = \mathcal{S} \gamma_2y, \ldots, \mathcal{S} \gamma_nx = \mathcal{S} \gamma_ny
+$$
+
+を満たす型代入 $\mathcal{S}$ を求める
+
+* 一般に、単一化問題は対象の構造によって解法がない場合もある
+* 今回の型システムは一階の単一化問題→必ず解が求まる
 
 ---
+
+一階の単一化アルゴリズム
+
+$$
+TODO
+$$
+
+---
+
+実装
+
+```ocaml
+ (* (ty * ty) list -> subst *)
+let rec unify l = match l with
+    [] -> []
+  | (ty1, ty2) :: rest when ty1 = ty2 -> unify rest
+  | (TyVar n, ty) :: rest -> (* TyVar n implies alpha, ty implies tau, rest implies X *)
+      if not (MySet.member n (freevar_ty ty))
+      then (n, ty) :: unify (subst_eqs [(n, ty)] rest)
+      else err ("Typing failed")
+  | (ty, TyVar n) :: rest ->
+      if not (MySet.member n (freevar_ty ty))
+      then (n, ty) :: unify (subst_eqs [(n, ty)] rest)
+      else err ("Typing failed")
+  | (TyFun (ty1_1, ty1_2), TyFun (ty2_1, ty2_2)) :: rest ->
+      unify ((ty1_1, ty2_1) :: (ty1_2, ty2_2) :: rest)
+  | (TyList ty1, TyList ty2) :: rest ->
+      unify ((ty1, ty2) :: rest)
+  | _ -> err ("Typing failed")
+```
 
 ---
 
