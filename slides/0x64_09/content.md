@@ -20,11 +20,11 @@ Disclaimer
 OCamlでOCaml（のサブセット言語）のREPLを実装
 
 ```text
-# let rec fact n = if n <= 1 then 1 else n * fact(n - 1);;
-val fact = <fun>
+#> let rec fact n = if n <= 1 then 1 else n * fact(n - 1)
+=> val fact = <fun>
 
-# fact(10);;
-val - = 3628800
+#> fact(10)
+=> val - = 3628800
 ```
 
 ---
@@ -32,10 +32,10 @@ val - = 3628800
 静的な型システムはまだない
 
 ```text
-# let f x = 1 + true;;
-val f = <fun>
+#> let f x = 1 + true
+=> val f = <fun>
 
-# f 1;;
+#> f 1
 Fatal error: exception Eval.Error("Both arguments must be integer: +")
 ```
 
@@ -61,11 +61,11 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 プリミティブ演算の型推論
 
 ```text
-# 1;;
-val - : int = 1
+#> 1
+=> val - : int = 1
 
-# 1 > 0;;
-val - : bool = true
+#> 1 > 0
+=> val - : bool = true
 ```
 
 * 構文木をたどればできそう
@@ -75,8 +75,8 @@ val - : bool = true
 関数定義の型推論
 
 ```text
-# fun x -> x + 1;;
-val - : ???
+#> fun x -> x + 1;;
+=> val - : ???
 ```
 
 * 簡単ではない
