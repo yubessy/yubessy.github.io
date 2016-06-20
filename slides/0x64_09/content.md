@@ -158,14 +158,13 @@ $$
 
 $$
 \frac{
-  \Gamma \vdash e_1 : {\rm int} \quad \Gamma \vdash e_2 : {\rm int}
+  \Gamma , x : \gamma_1 \vdash e : \gamma_2
 }{
-  \rm{fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
+  \Gamma \vdash \rm{fun} \; x \rightarrow e : \gamma_1 \rightarrow \gamma_2
 }
 $$
 
-* "関数本体の式 $e$ が、引数 $x$ が型 $\gamma_1$ を持つという仮定の下で型 $\gamma_2$　を持つならば、  
-  $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
+* "関数本体の式 $e$ が、引数 $x$ が型 $\gamma_1$ を持つという仮定の下で型 $\gamma_2$ を持つならば、 $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
 * そのままでは型推論に使えない
 
 ---
