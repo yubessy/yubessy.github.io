@@ -285,7 +285,8 @@ $$
 \mathcal{U} (\\{(\gamma\_{11} \rightarrow \gamma\_{12}, \gamma\_{21} \rightarrow \gamma\_{22})\\} \uplus X)
   & = \mathcal{U} (\\{(\gamma\_{11}, \gamma\_{12}), (\gamma\_{21}, \gamma\_{22})\\} \uplus X)
 \\\\
-\mathcal{U} (\\{(\gamma_1, \gamma_2)\\} \uplus X) = {\rm \bf error} \quad ({\rm otherwise})
+\mathcal{U} (\\{(\gamma_1, \gamma_2)\\} \uplus X)
+  & = {\rm \bf error} \quad ({\rm otherwise})
 \end{align}
 $$
 
