@@ -96,6 +96,8 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 コンピュータのきもち
 
+`fun x -> x + 1`
+
 * 誰が `x + 1` を先に見ろといった？？？
 * それ `fun f -> fun g -> f g` の前でも言えんの？
 
