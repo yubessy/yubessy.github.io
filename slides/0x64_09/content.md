@@ -277,7 +277,7 @@ $$
       {\rm \bf error} & ({\rm otherwise})
     \end{cases}
 \\\\
-\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) \quad ({\rm if} \, \gamma \neq \alpha)
+\mathcal{U} (\\{(\gamma, \alpha)\\} \uplus X) \quad ({\rm if} \, \gamma \neq \alpha)
   & = ({\rm same \, as \, above})
 \\\\
 \mathcal{U} (\\{(\gamma\_{11} \rightarrow \gamma\_{12}, \gamma\_{21} \rightarrow \gamma\_{22})\\} \uplus X)
