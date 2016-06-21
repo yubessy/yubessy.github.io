@@ -245,7 +245,7 @@ $$
 与えられた制約の集合
 
 $$
-\bigl\{ (\gamma\_{11} , \gamma\_{12}) , (\gamma\_{21} , \gamma\_{22}) , \ldots , (\gamma\_{n1}, \gamma\_{n2}) \bigr\}
+\\{ (\gamma\_{11} , \gamma\_{12}) , (\gamma\_{21} , \gamma\_{22}) , \ldots , (\gamma\_{n1}, \gamma\_{n2}) \\}
 $$
 
 に対して
