@@ -245,13 +245,13 @@ $$
 与えられた制約の集合
 
 $$
-\{ (\gamma\_{1x}, \gamma\_{1y}), (\gamma\_{2x}, \gamma\_{2y}), \ldots, (\gamma\_{nx}, \gamma\_{ny}) \}
+\bigl\{ (\gamma\_{11} , \gamma\_{12}) , (\gamma\_{21} , \gamma\_{22}) , \ldots , (\gamma\_{n1}, \gamma\_{n2}) \bigr\}
 $$
 
 に対して
 
 $$
-\mathcal{S} \gamma\_{1x} = \mathcal{S} \gamma\_{1y}, \mathcal{S} \gamma\_{2x} = \mathcal{S} \gamma\_{2y}, \ldots, \mathcal{S} \gamma\_{nx} = \mathcal{S} \gamma\_{ny}
+\mathcal{S} \gamma\_{11} = \mathcal{S} \gamma\_{12}, \mathcal{S} \gamma\_{21} = \mathcal{S} \gamma\_{22}, \ldots, \mathcal{S} \gamma\_{n1} = \mathcal{S} \gamma\_{n2}
 $$
 
 を満たす型代入 $\mathcal{S}$ を求める
