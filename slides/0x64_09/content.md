@@ -265,8 +265,16 @@ $$
 一階の単一化アルゴリズム
 
 $$
-a = b \\\\
-b = c \\\\
+\mathcal{U} (\phi) = \phi
+\\\\
+\mathcal{U} (\\{(\gamma, \gamma)\\} \uplus X) = \mathcal{U} (X)
+\\\\
+\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) ({\rm if} \gamma \neq \alpha)
+  = \begin{cases}
+      \cdots & (\alpha \not\in FTV(\gamma))
+      \\
+      {\rm \bf error} & ({\rm otherwise})
+    \end{cases}
 $$
 
 ---
