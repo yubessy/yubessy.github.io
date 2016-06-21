@@ -271,25 +271,22 @@ $$
 \\\\
 \mathcal{U} (\\{(\gamma, \gamma)\\} \uplus X)
   & = \mathcal{U} (X)
-\end{align}
-$$
-
-$$
 \\\\
-\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) \quad ({\rm if} \gamma \neq \alpha)
-  = \begin{cases}
+\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) \quad ({\rm if} \, \gamma \neq \alpha)
+  & = \begin{cases}
       \mathcal{U} ([\alpha \mapsto \gamma] X) \circ [\alpha \mapsto \gamma] & (\alpha \not\in FTV(\gamma))
       \\\\
       {\rm \bf error} & ({\rm otherwise})
     \end{cases}
 \\\\
-\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) \quad ({\rm if} \gamma \neq \alpha)
-  = ({\rm same as above})
+\mathcal{U} (\\{(\alpha, \gamma)\\} \uplus X) \quad ({\rm if} \, \gamma \neq \alpha)
+  & = ({\rm same \, as \, above})
 \\\\
 \mathcal{U} (\\{(\gamma\_{11} \rightarrow \gamma\_{12}, \gamma\_{21} \rightarrow \gamma\_{22})\\} \uplus X)
-  = \mathcal{U} (\\{(\gamma\_{11}, \gamma\_{12}), (\gamma\_{21}, \gamma\_{22})\\} \uplus X)
+  & = \mathcal{U} (\\{(\gamma\_{11}, \gamma\_{12}), (\gamma\_{21}, \gamma\_{22})\\} \uplus X)
 \\\\
 \mathcal{U} (\\{(\gamma_1, \gamma_2)\\} \uplus X) = {\rm \bf error} \quad ({\rm otherwise})
+\end{align}
 $$
 
 ---
