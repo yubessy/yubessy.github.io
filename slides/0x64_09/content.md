@@ -265,13 +265,13 @@ $$
 一階の単一化アルゴリズム
 
 $$
-\begin{equation*}
+\begin{align}
 \mathcal{U} (\phi)
-  = \phi
+  & = \phi
 \\\\
 \mathcal{U} (\\{(\gamma, \gamma)\\} \uplus X)
-  = \mathcal{U} (X)
-\end{equation*}
+  & = \mathcal{U} (X)
+\end{align}
 $$
 
 $$
