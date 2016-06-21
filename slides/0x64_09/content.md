@@ -266,10 +266,10 @@ $$
 
 $$
 \mathcal{U} (\phi)
-  & = \phi
+  & = & \phi
 \\\\
 \mathcal{U} (\\{(\gamma, \gamma)\\} \uplus X)
-  & = \mathcal{U} (X)
+  & = & \mathcal{U} (X)
 $$
 
 $$
