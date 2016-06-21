@@ -164,7 +164,9 @@ $$
 }
 $$
 
-* "引数 $x$ が型 $\gamma_1$ を持つという仮定の下で、関数本体 $e$ が型 $\gamma_2$ を持つならば、 $\rm{fun} \; x \rightarrow e$ は型 $\gamma_1 \rightarrow \gamma_2$ をもつ"
+引数 $x$ が型 $\gamma_1$ をもつという仮定の下で 関数本体 $e$ が型 $\gamma_2$ をもつならば ${\rm fun} \; x \rightarrow e$ は型
+$\gamma_1 \rightarrow \gamma_2$ をもつ"
+
 * $e$ の型を推論する際に $x$ の型が必要となるが、 $x$ の型は未知
 * → 単純な推論ができない
 
@@ -183,8 +185,9 @@ $$
 
 * $\mathcal{S} \;$ 型代入
   * 型変数とその型の対応関係
+  * 数学的には型変数から型への有限写像
   * 実装上は (型変数, 型) ペアのリスト
-* $\mathcal{S} \gamma \;$ 型 $\gamma$ に含まれる型変数を $\mathcal{S}$ によって置換した型 
+* $\mathcal{S} \gamma \;$ 型 $\gamma$ に含まれる型変数を $\mathcal{S}$ によって置換した型
 * $\mathcal{S} \Gamma \;$ 型環境 $\Gamma$ に現れる型に $\mathcal{S}$ を適用して得られる型環境
 
 ---
@@ -198,7 +201,9 @@ $$
 
 型推論アルゴリズムの動作例
 
-式 `fun x -> x + 1` の場合
+```
+fun x -> x + 1
+```
 
 $$
 \frac{
@@ -214,18 +219,20 @@ $$
 
 1. $x$ の型を $\alpha$ とおく
 2. $x + 1$ の両項の型 $\alpha$ , ${\rm int}$ を得る
-3. $x + 1$ の型 ${\rm int}$ と $(\alpha, \, {\rm int})$ という制約を得る
-  * $(\alpha, {\rm int}) \;$ $\alpha$ と ${\rm int}$ が同じ型を持つ  
+3. $+$ の型付け規則から
+   $x + 1$ の型 ${\rm int}$ と制約 $(\alpha, \, {\rm int})$ を得る
+  * $(\alpha, \, {\rm int}) \;$ $\alpha$ と ${\rm int}$ が同じ型を持つ  
 4. **単一化** により制約を満たす型代入 $[ \alpha \mapsto {\rm int} ]$ を得る
 
 ---
 
 なぜ単一化が必要か
 
-* 3で「『・・・』という制約を得る」と言ったのはなぜ？
-  * 即座に「型代入 $[ \alpha \mapsto {\rm int} ]$ を得る」とは言えないのか？
+* 3では「制約 $(\alpha, \, {\rm int})$ を得るを得る」と言った
+  * 「型代入 $[ \alpha \mapsto {\rm int} ]$ を得る」とは言えないのか？
 * → 型付け規則からはあくまで **制約** しか得られない
-  * $(\alpha \rightarrow bool, \, {\rm int} \rightarrow \beta \rightarrow \beta)$ のような  左辺が単一の型変数とならない制約が得られることもある
+  * $(\alpha \rightarrow bool, \, {\rm int} \rightarrow \beta \rightarrow \beta)$ のように
+    両辺いずれも単一の型変数でない制約が得られることもある
 * 制約から型代入を導くのが単一化
   * 制約は「方程式」
   * 型代入は「方程式の解」
@@ -238,19 +245,20 @@ $$
 与えられた制約の集合
 
 $$
-{(\gamma_1x, \gamma_1y), (\gamma_2x, \gamma_2y), (\gamma_nx, \gamma_ny)}
+\{ (\gamma_{1x}, \gamma_{1y}), (\gamma_{2x}, \gamma_{2y}), \ldots, (\gamma_{nx}, \gamma_{ny}) \}
 $$
 
-に対して、
+に対して
 
 $$
-\mathcal{S} \gamma_1x = \mathcal{S} \gamma_1y, \mathcal{S} \gamma_2x = \mathcal{S} \gamma_2y, \ldots, \mathcal{S} \gamma_nx = \mathcal{S} \gamma_ny
+\mathcal{S} \gamma_{1x} = \mathcal{S} \gamma_{1y}, \mathcal{S} \gamma_{2x} = \mathcal{S} \gamma_{2y}, \ldots, \mathcal{S} \gamma_{nx} = \mathcal{S} \gamma_{ny}
 $$
 
 を満たす型代入 $\mathcal{S}$ を求める
 
-* 一般に、単一化問題は対象の構造によって解法がない場合もある
-* 今回の型システムは一階の単一化問題→必ず解が求まる
+* 単一化問題が解けるかどうかは対象の代数的構造による
+* 今回の型システムは **一階の単一化問題**
+  → 必ず解が求まる
 
 ---
 
@@ -283,6 +291,18 @@ let rec unify l = match l with
       unify ((ty1, ty2) :: rest)
   | _ -> err ("Typing failed")
 ```
+
+---
+
+おさらい
+
+**型推論は方程式を解くようなもの**
+
+* 方程式をたてる
+  * 未知の型を型変数でおく
+  * 型付け規則を適用することで制約を得る
+* 方程式を解く
+  * 単一化によって制約から型代入を求める
 
 ---
 
