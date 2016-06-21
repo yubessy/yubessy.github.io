@@ -85,9 +85,7 @@ Fatal error: exception Eval.Error("Both arguments must be integer: +")
 
 人間の思考
 
-```ocaml
-fun x -> x + 1
-```
+`fun x -> x + 1`
 
 1. `1` は `int`
 2. `+` は `int -> int -> int` だから `x + 1` は `int`
@@ -201,9 +199,7 @@ $\gamma_1 \rightarrow \gamma_2$ をもつ
 
 型推論アルゴリズムの動作例
 
-```
-fun x -> x + 1
-```
+`fun x -> x + 1`
 
 $$
 \frac{
