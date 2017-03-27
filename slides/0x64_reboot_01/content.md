@@ -2,21 +2,19 @@
 
 ## Distributed Deep Newral Network
 
-##### 0x64物語 第08夜 "Network"
+###### 0x64物語 reboot 第01夜 "Network"
 
-##### Shotaro Tanaka (@yubessy)
+#### Shotaro Tanaka (@yubessy)
 
 ---
 
-### Excuse
+###### 今日の話
 
-* ニューラルネットとネットワークをかけた
-  と思わせて
-* 分散機械学習のネットワークアーキテクチャを
-  真面目に語るつもりだったけど
-* 書いてみたらあまりネットワークの話がなかった
+## ニューラルネットワーク
 
-~~なんかごめん~~
+## x
+
+## 分散コンピューティング
 
 ---
 
@@ -26,24 +24,26 @@
   * テキスト < 画像 < 動画
 * 計算量の増加
   * いわゆるディープラーニング
-* 1つのコンピュータの処理の頭打ち
+* 単一マシンの処理能力の頭打ち
 
--> 時代は分散コンピューティング
+##### -> 時代は分散コンピューティング
 
 ---
 
 ### Why Network?
 
 * 分散コンピューティング
-  * = 複数のノードがひとつの目的の計算を行う
-* たいていノード間の通信がボトルネック
-* 何を・どう分散させるかを考える必要
+  * 複数のノードがひとつの目的の計算を行う
+* アーキテクチャ
+  * 何を分散させるか
+  * 分散したもの同士をどうつなぐか
 
--> たぶんネットワークアーキテクチャが重要
+##### -> ネットワークアーキテクチャが重要
 
 ---
 
-### 分散処理の捉え方
+### 分散コンピューティングの歩き方
+
 
 * **分散対象**: 何を分けるか
   * そもそも分割できるのか
@@ -58,59 +58,90 @@
 
 ### 深層ニューラルネット (DNN)
 
-* たくさんのニューロンからなるグラフ
-* バック・プロパゲーション
+* 多数のレイヤを接続した有向グラフ
+* Back Propagation (BP)
   * 入力値に対する、グラフの出力値と正解値の
     差分を求める
   * 差分が小さくなるよう、出力側から順に
-    各ニューロンのパラメータを調整
-* SGD
-  * データ点を１個与えるごとにパラメータを更新
+    各レイヤのパラメータを調整
+* Stochastic Gradient Descent
+  * データ点を１つずつ与えながら
+    各レイヤのパラメータを更新
 
 ---
 
+### 深層ニューラルネット (DNN)
 
+![](googlenet.png)
+
+<div style="font-size: 16pt; text-align: center;">From http://joelouismarino.github.io/blog_posts/blog_googlenet_keras.html</div>
 
 ---
 
 ### DNNと分散処理
 
-* DNNは実は分散処理に向いている
-  * モデル並列化 -> グラフを複数の部分に分割
-  * データ並列化 -> SGDを並列化
+* DNNは分散処理に向いている
+  * モデル並列 = 計算グラフを複数の部分に分割
+  * データ並列 = SGDをノード毎に並列化
 * "Large Scale Distributed Deep Networks" 
   Dean, et al. 2012.
-  * Google の論文
-  * DNNのモデル / データの分散について解説
+  * By Google
+  * DNNのモデル / データの並列処理について解説
   * ~~またお前か~~
 
 ---
 
-### DistBelief: モデル並列化
+### モデル並列
 
-* 分散対象: ニューラルネットのグラフ
-    * ニューラルネットを部分グラフに分割
-    * 各部分グラフを別のマシンで動かす
-* ノード間通信: ワーカー間の直接通信
-    * ニューラルネットの結合部が通信
+* 分散対象 = ニューラルネットのグラフ
+  * モデルを部分グラフに分割
+  * 各部分グラフを別のワーカーに割り当て
+* ノード間通信 = ワーカー間の直接通信
+  * 元のモデルで結合されていた部分が
+    ノードをまたいで通信
+* ボトルネック
+  * 適切に分割しないと
+    ノード間のトラフィックがえらいことに
 
 ---
 
-### DownpourSGD: データの分散
+### モデル並列
 
-* 分散対象: 学習データの集合
+![](model_parallelism.png)
+
+<div style="text-align: center; font-size: smaller;">
+Dean, et al. [1] Figure 1
+</div>
+
+---
+
+### データ並列
+
+* 分散対象 = 学習データ
   * データをチャンクに分割
-  * 各チャンクを別のマシンに処理させる
-* ノード間通信: パラメータ・サーバ方式
-  * 各ニューロンのパラメータ保持するサーバ
+  * 各チャンクを別のワーカーに処理させる
+* ノード間通信 = パラメータ・サーバ方式
+  * 各レイヤのパラメータを保持するサーバ
   * ワーカーノードは一定量の学習を終えるごとに
     非同期通信によりパラメータを更新
+* ボトルネック
+  * パラメータサーバの負荷
 
 ---
 
-### これG社以外扱えるの？
+### データ並列
 
-##### と思ったあなたへ
+![](data_parallelism.png)
+
+<div style="text-align: center; font-size: smaller;">
+Dean, et al. [1] Figure 2
+</div>
+
+---
+
+## これ Google 以外扱えるの？
+
+###### と思ったあなたへ
 
 ---
 
@@ -120,7 +151,15 @@
   実はすでに TensorFlow に組み込まれている
 * 🔎 Distributed TensorFlow
 
-TODO: 図
+<div style="text-align: right;">
+<img src="tensorflow.png" />
+</div>
+
+---
+
+## 雰囲気だけ紹介
+
+###### ※試す時間はなかった
 
 ---
 
@@ -128,12 +167,14 @@ TODO: 図
 
 ```python
 cluster = tf.train.ClusterSpec({
-    "worker": [  # データ分散のためのワーカー
+    # ワーカー (データ分散用)
+    "worker": [  
         "worker0.example.com:2222", 
         "worker1.example.com:2222",
         "worker2.example.com:2222"
     ],
-    "ps": [  # モデル分散のためのパラメータサーバ
+    # パラメータサーバ (モデル分散用)
+    "ps": [
         "ps0.example.com:2222",
         "ps1.example.com:2222"
     ]})
@@ -143,13 +184,15 @@ cluster = tf.train.ClusterSpec({
 
 ### モデル並列化
 
-* ニューラルネットの各層を複数のPSに分散
+* レイヤを複数のPSに分散
 
 ```python
+# 同じPSに乗せたいパラメータ群を tf.device でくくる
 with tf.device("/job:ps/task:0"):
   weights_1 = tf.Variable(...)
   biases_1 = tf.Variable(...)
- 
+
+# タスクの番号に応じてラウンドロビンでPSが決まる 
 with tf.device("/job:ps/task:1"):
   weights_2 = tf.Variable(...)
   biases_2 = tf.Variable(...)
@@ -159,42 +202,35 @@ with tf.device("/job:ps/task:1"):
 
 ### データ並列化
 
-* 各ワーカーにデータを分散させ、モデルのグラフを定義
+* 各ワーカに同じグラフを構築
 
 ```python
-dev = tf.train.replica_device_setter(
-    worker_device="/job:worker/task:%d" % FLAGS.task_index,
-    cluster=cluster)
-
-with tf.device(dev):
+# replica_device_setter により
+# 各ワーカに同じグラフをレプリケーション
+with tf.device(tf.train.replica_device_setter(
+    worker_device="/job:worker/task:%d" % task_index,
+    cluster=cluster)):
     input, labels = ...
     layer_1 = tf.nn.relu(tf.matmul(input, weights_1) + biases_1)
     logits = tf.nn.relu(tf.matmul(layer_1, weights_2) + biases_2)
     train_op = ...
 ```
 
----
-
-### 学習
-
-* 各ワーカで学習を実行
-
-```
-with tf.train.MonitoredTrainingSession(
-    master=server.target, is_chief=(FLAGS.task_index == 0)) as sess:
-    while not sess.should_stop():
-        mon_sess.run(train_op)
-```
-
 ---   
 
 ### まとめ
+
+* NNは分散コンピューティングと相性がよい
+* モデル並列 / データ並列
+* TensorFlow最強
+
+~~ネットワークあんま関係なかったかも~~
 
 ---
 
 ### 参考
 
-* [Large Scale Distributed Deep Networks](http://www.cs.toronto.edu/~ranzato/publications/DistBeliefNIPS2012_withAppendix.pdf)
-* [Distributed TensorFlow](https://www.tensorflow.org/deploy/distributed)
-* [Distributed TensorFlowを試してみる](http://qiita.com/ashitani/items/2e48729e78a9f77f9790)
-* [Distributed TensorFlowの話](http://qiita.com/kazunori279/items/981a8a2a44f5d1172856)
+* [1] [Large Scale Distributed Deep Networks](http://www.cs.toronto.edu/~ranzato/publications/DistBeliefNIPS2012_withAppendix.pdf)
+* [2] [Distributed TensorFlow](https://www.tensorflow.org/deploy/distributed)
+* [3] [Distributed TensorFlowを試してみる](http://qiita.com/ashitani/items/2e48729e78a9f77f9790)
+* [4] [Distributed TensorFlowの話](http://qiita.com/kazunori279/items/981a8a2a44f5d1172856)
