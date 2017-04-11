@@ -38,18 +38,17 @@
   * 何を分散させるか
   * 分散したもの同士をどうつなぐか
 
-##### -> ネットワークアーキテクチャが重要
+##### -> ネットワーク設計が重要
 
 ---
 
 ### 分散コンピューティングの歩き方
 
-
 * **分散対象**: 何を分けるか
   * そもそも分割できるのか
-  * 負荷を均等できるか
-* **ノード間通信**: どうつなぐか
-  * クライアント・サーバ型 / ワーカー間通信
+  * 負荷を均等化できるか
+* **アーキテクチャ**: どうつなぐか
+  * クライアント・サーバ型 / メッシュ型 / ...
   * 同期 / 非同期
   * スループット / レイテンシ
   * プロトコル
@@ -60,13 +59,12 @@
 
 * 多数のレイヤを接続した有向グラフ
 * Back Propagation (BP)
-  * 入力値に対する、グラフの出力値と正解値の
+  * 入力値に対する、モデルの出力値と正解値の
     差分を求める
   * 差分が小さくなるよう、出力側から順に
     各レイヤのパラメータを調整
-* Stochastic Gradient Descent
-  * データ点を１つずつ与えながら
-    各レイヤのパラメータを更新
+* Stochastic Gradient Descent (SGD)
+  * データ点を１つずつ与えながらモデルを学習
 
 ---
 
@@ -81,23 +79,30 @@
 ### DNNと分散処理
 
 * DNNは分散処理に向いている
-  * モデル並列 = 計算グラフを複数の部分に分割
-  * データ並列 = SGDをノード毎に並列化
+  * モデル並列化 = 計算グラフを複数の部分に分割
+  * データ並列化 = データを分割しノード毎にSGD
 * "Large Scale Distributed Deep Networks" 
   Dean, et al. 2012.
   * By Google
-  * DNNのモデル / データの並列処理について解説
-  * ~~またお前か~~
+  * DNNのモデル / データ並列化両方について解説
 
 ---
 
-### モデル並列
+### またお前か
 
-* 分散対象 = ニューラルネットのグラフ
-  * モデルを部分グラフに分割
-  * 各部分グラフを別のワーカーに割り当て
-* ノード間通信 = ワーカー間の直接通信
-  * 元のモデルで結合されていた部分が
+# ![](jd.jpg)
+
+###### Jeff Dean
+
+---
+
+### モデル並列化
+
+* 分散対象 = DNNのグラフ
+  * グラフ全体を部分グラフに分割
+  * 各部分グラフを別々のノードに割り当て
+* アーキテクチャ = メッシュ型
+  * 元のグラフで結合されていた部分が
     ノードをまたいで通信
 * ボトルネック
   * 適切に分割しないと
@@ -105,7 +110,7 @@
 
 ---
 
-### モデル並列
+### モデル並列化
 
 ![](model_parallelism.png)
 
@@ -115,21 +120,21 @@ Dean, et al. [1] Figure 1
 
 ---
 
-### データ並列
+### データ並列化
 
 * 分散対象 = 学習データ
   * データをチャンクに分割
-  * 各チャンクを別のワーカーに処理させる
-* ノード間通信 = パラメータ・サーバ方式
-  * 各レイヤのパラメータを保持するサーバ
+  * 各チャンクを別々のノードに処理させる
+* アーキテクチャ = Parameter Server (PS) 方式
+  * PSノードが各レイヤのパラメータを保持
   * ワーカーノードは一定量の学習を終えるごとに
     非同期通信によりパラメータを更新
 * ボトルネック
-  * パラメータサーバの負荷
+  * ワーカが増えるとPSノードの負荷が高くなる
 
 ---
 
-### データ並列
+### データ並列化
 
 ![](data_parallelism.png)
 
@@ -149,7 +154,8 @@ Dean, et al. [1] Figure 2
 
 * ここまで説明した分散処理機能が
   実はすでに TensorFlow に組み込まれている
-* 🔎 Distributed TensorFlow
+  * 🔎 Distributed TensorFlow
+* ノード間はgRPCで通信
 
 <div style="text-align: right;">
 <img src="tensorflow.png" />
@@ -167,13 +173,13 @@ Dean, et al. [1] Figure 2
 
 ```python
 cluster = tf.train.ClusterSpec({
-    # ワーカー (データ分散用)
+    # ワーカー (データ分散)
     "worker": [  
         "worker0.example.com:2222", 
         "worker1.example.com:2222",
         "worker2.example.com:2222"
     ],
-    # パラメータサーバ (モデル分散用)
+    # パラメータサーバ (モデル分散)
     "ps": [
         "ps0.example.com:2222",
         "ps1.example.com:2222"
@@ -202,17 +208,19 @@ with tf.device("/job:ps/task:1"):
 
 ### データ並列化
 
-* 各ワーカに同じグラフを構築
+* 各ワーカーに同じグラフを複製
 
 ```python
-# replica_device_setter により
-# 各ワーカに同じグラフをレプリケーション
+# replica_device_setter で
+# 複数のワーカに同じグラフを複製
 with tf.device(tf.train.replica_device_setter(
     worker_device="/job:worker/task:%d" % task_index,
     cluster=cluster)):
     input, labels = ...
-    layer_1 = tf.nn.relu(tf.matmul(input, weights_1) + biases_1)
-    logits = tf.nn.relu(tf.matmul(layer_1, weights_2) + biases_2)
+    layer_1 = tf.nn.relu(
+        tf.matmul(input, weights_1) + biases_1)
+    logits = tf.nn.relu(
+        tf.matmul(layer_1, weights_2) + biases_2)
     train_op = ...
 ```
 
@@ -221,10 +229,14 @@ with tf.device(tf.train.replica_device_setter(
 ### まとめ
 
 * NNは分散コンピューティングと相性がよい
-* モデル並列 / データ並列
-* TensorFlow最強
+* モデル並列化 / データ並列化
+* TensorFlow 最強
 
-~~ネットワークあんま関係なかったかも~~
+---
+
+###### ~~ネットワークあんま関係なかったかも~~
+
+# ![](mengo.jpg)
 
 ---
 
