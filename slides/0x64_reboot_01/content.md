@@ -1,10 +1,10 @@
 <!-- $theme: gaia -->
 
-## Distributed Deep Newral Network
+## Distributed Deep Newral Networks
 
 ###### 0x64物語 reboot 第01夜 "Network"
 
-#### Shotaro Tanaka (@yubessy)
+#### @yubessy
 
 ---
 
