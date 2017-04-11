@@ -30,18 +30,6 @@
 
 ---
 
-### Why Network?
-
-* 分散コンピューティング
-  * 複数のノードがひとつの目的の計算を行う
-* アーキテクチャ
-  * 何を分散させるか
-  * 分散したもの同士をどうつなぐか
-
-##### -> ネットワーク設計が重要
-
----
-
 ### 分散コンピューティングの歩き方
 
 * **分散対象**: 何を分けるか
@@ -81,18 +69,10 @@
 * DNNは分散処理に向いている
   * モデル並列化 = 計算グラフを複数の部分に分割
   * データ並列化 = データを分割しノード毎にSGD
-* "Large Scale Distributed Deep Networks" 
+* "Large Scale Distributed Deep Networks"
   Dean, et al. 2012.
   * By Google
   * DNNのモデル / データ並列化両方について解説
-
----
-
-### またお前か
-
-# ![](jd.jpg)
-
-###### Jeff Dean
 
 ---
 
@@ -144,12 +124,6 @@ Dean, et al. [1] Figure 2
 
 ---
 
-## これ Google 以外扱えるの？
-
-###### と思ったあなたへ
-
----
-
 ### Distributed TensorFlow
 
 * ここまで説明した分散処理機能が
@@ -165,8 +139,6 @@ Dean, et al. [1] Figure 2
 
 ## 雰囲気だけ紹介
 
-###### ※試す時間はなかった
-
 ---
 
 ### クラスタ定義
@@ -174,8 +146,8 @@ Dean, et al. [1] Figure 2
 ```python
 cluster = tf.train.ClusterSpec({
     # ワーカー (データ分散)
-    "worker": [  
-        "worker0.example.com:2222", 
+    "worker": [
+        "worker0.example.com:2222",
         "worker1.example.com:2222",
         "worker2.example.com:2222"
     ],
@@ -198,7 +170,7 @@ with tf.device("/job:ps/task:0"):
   weights_1 = tf.Variable(...)
   biases_1 = tf.Variable(...)
 
-# タスクの番号に応じてラウンドロビンでPSが決まる 
+# タスクの番号に応じてラウンドロビンでPSが決まる
 with tf.device("/job:ps/task:1"):
   weights_2 = tf.Variable(...)
   biases_2 = tf.Variable(...)
@@ -224,19 +196,13 @@ with tf.device(tf.train.replica_device_setter(
     train_op = ...
 ```
 
----   
+---
 
 ### まとめ
 
 * NNは分散コンピューティングと相性がよい
 * モデル並列化 / データ並列化
 * TensorFlow 最強
-
----
-
-###### ~~ネットワークあんま関係なかったかも~~
-
-# ![](mengo.jpg)
 
 ---
 
