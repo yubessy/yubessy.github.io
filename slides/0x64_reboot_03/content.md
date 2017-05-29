@@ -47,14 +47,14 @@ assert("hoge.ne.jp" =~ /[a-z]+\.(co|ne)\.jp/)
 
 ```plain
 assert("hoge.co.jp" =~ /[a-z]+\.(co|ne)\.jp/)
-// "hoge.ne.jp" みたいなテストケースがない
+// "hoge.ne.jp" とかをカバーしてない！
 ```
 
 ちゃんと言ってほしい！
 
 ---
 
-### それくらい見ればわかるじゃん？
+### それくらい見ればわかるやん？
 
 ---
 
@@ -202,7 +202,7 @@ type Inst struct {
     Out  uint32 // 主にマッチ時のジャンプ先命令の番号を格納
     Arg  uint32 // 主に非マッチ時のジャンプ先命令の番号を格納
     Rune []rune // マッチする文字
-    Flag bool   // ### テスト済みフラグ
+    Flag bool   // テスト済みフラグ <- new!
 }
 ```
 
@@ -224,7 +224,7 @@ func (m *machine) step(...) {
         add = c == i.Rune[0]
     ...
     if add {
-        i.Flag = true // 文字マッチが成功したら命令にマーク
+        i.Flag = true // 文字マッチが成功したらフラグを立てる
     }
     ...
 }
@@ -245,11 +245,11 @@ func (re *Regexp) Coverage() (int, int) {
         if x.Op == syntax.InstRune || ... {
             a++
             if x.Flag {
-                c++
+                s++
             }
         }
     }
-    return c, a
+    return s, a
 }
 
 ```
@@ -273,7 +273,7 @@ func main() {
 7 / 9　
 ```
 
-※テストケースでカバーした文字マッチ命令の数
+※今回は文字マッチ命令だけ数えた
 
 ---
 
@@ -281,3 +281,4 @@ func main() {
 
 * 正規表現のカバレッジは（頑張れば）測れる
 * Golangの正規表現実装はわりと簡単に読める
+* テスト回のはずが正規表現回になった
