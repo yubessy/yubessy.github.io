@@ -124,7 +124,7 @@ https://emailregex.com/
 ### 手頃な処理系を探す旅
 
 * ~~PCRE~~ やばい
-* ~~java.util.Regexp~~ つらい
+* ~~java.util.regex~~ つらい
 * ~~Oniguruma / Onigumo~~ でかい
 * ~~Rust~~ おしい（僕の力では読めない）
 * **Golang** <- !!!
