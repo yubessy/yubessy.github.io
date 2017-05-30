@@ -191,13 +191,13 @@ type Inst struct {
  1: InstRune     2  0 ['a', 'z'] // 'a' - 'z'
  2: InstAlt      1  3 []         // 命令1, 3のいずれか
  3: InstRune1    4  0 ['.']      // '.'
- 4: InstCapture  9  2 []         // ？
+ 4: InstCapture  9  2 []         // グルーピング開始
  5: InstRune1    6  0 ['c']      // 'c'
  6: InstRune1   10  0 ['o']      // 'o'
  7: InstRune1    8  0 ['n']      // 'n'
  8: InstRune1   10  0 ['e']      // 'e'
  9: InstAlt      5  7 []         // 命令5, 7のいずれか
-10: InstCapture 11  3 []         // ？
+10: InstCapture 11  3 []         // グルーピング終了
 11: InstRune1   12  0 ['.']      // '.'
 12: InstRune1   13  0 ['j']      // 'j'
 13: InstRune1   14  0 ['p']      // 'p'
@@ -208,7 +208,7 @@ type Inst struct {
 
 ### カバレッジの計算
 
-やりたいこと = 正規表現のカバレッジを計る
+やりたいこと = 正規表現のカバレッジを測る
 
 -> 各命令にテスト済みフラグを立てて数える
 
