@@ -43,14 +43,14 @@ assert("hoge.ne.jp" =~ /[a-z]+\.(co|ne)\.jp/)
 /[a-z]+\.(co|ne)\.jp/
 ```
 
-↓カバレッジが十分でない
+↓カバレッジが十分でない例
 
 ```plain
 assert("hoge.co.jp" =~ /[a-z]+\.(co|ne)\.jp/)
-// "hoge.ne.jp" とかをカバーしてない！
+# "hoge.ne.jp" は？
 ```
 
-ちゃんと言ってほしい！
+こういうのを数値化したい
 
 ---
 
@@ -113,11 +113,11 @@ https://emailregex.com/
 
 大体の言語では正規表現はライブラリとして提供
 
--> 内部実装はラップされてしまって見えない
+-> 内部実装はラップされていて見えない
 
 -> 各パスを通った・通らないを知るすべがない
 
--> **処理系に手を入れるしかない**
+-> **処理系に手を入れる**
 
 ---
 
@@ -134,12 +134,12 @@ https://emailregex.com/
 ### Golangの正規表現エンジン
 
 * NFA（非決定性有限オートマン）ベース
-  * アルゴリズムがわかりやすい
+  * アルゴリズムが理解しやすい
   * 計算量が文字数に対して線形
   * 平均的には遅い
 * Pure Go で実装
-  * 読みやすい
-  * コード量も手頃（エンジン部分は数100行）
+  * 自分でも読める
+  * コード量が手頃（エンジン部分は数100行）
 
 <small>https://github.com/golang/go/tree/master/src/regexp</small>
 
@@ -154,9 +154,9 @@ re.MatchString("hoge.co.jp")
 
 内部では
 
-1. 正規表現文字列をパーツに分解 (`syntax/parse.go`)
-2. パーツからプログラムを作成 (`syntax/compile.go`)
-3. 文字列に対してプログラムを実行 (`exec.go`)
+1. 正規表現の構文木を作成 (`syntax/parse.go`)
+2. 構文木からプログラムを作成 (`syntax/compile.go`)
+3. 文字列を入力としてプログラムを実行 (`exec.go`)
 
 ---
 
@@ -175,10 +175,10 @@ type Prog struct {
 
 ```go
 type Inst struct {
-    Op   InstOp // 命令の種別
-    Out  uint32 // 主にマッチ時のジャンプ先命令の番号を格納
-    Arg  uint32 // 主に非マッチ時のジャンプ先命令の番号を格納
-    Rune []rune // マッチする文字
+    Op   InstOp // 命令の種類
+    Out  uint32 // 成功時のジャンプ先の命令番号
+    Arg  uint32 // 失敗時のジャンプ先の命令番号（など）
+    Rune []rune // マッチする文字（文字マッチ命令のみ）
 }
 ```
 
@@ -210,14 +210,14 @@ type Inst struct {
 
 やりたいこと = 正規表現のカバレッジを測る
 
--> 各命令にテスト済みフラグを立てて数える
+-> 各命令にテスト済みフラグを用意
 
 ```go
 type Inst struct {
-    Op   InstOp // 命令の種別
-    Out  uint32 // 主にマッチ時のジャンプ先命令の番号を格納
-    Arg  uint32 // 主に非マッチ時のジャンプ先命令の番号を格納
-    Rune []rune // マッチする文字
+    Op   InstOp
+    Out  uint32
+    Arg  uint32
+    Rune []rune
     Flag bool   // テスト済みフラグ <- new!
 }
 ```
@@ -229,7 +229,7 @@ type Inst struct {
 マッチの実行時に通った命令をマーキングしておく
 
 ```go
-// 命令を1ステップ実行する関数 (exec.go)
+// 文字マッチ命令を1つ実行する関数 (exec.go)
 func (m *machine) step(...) {
     ...
     switch i.Op {
@@ -240,7 +240,7 @@ func (m *machine) step(...) {
         add = c == i.Rune[0]
     ...
     if add {
-        i.Flag = true // 文字マッチが成功したらフラグを立てる
+        i.Flag = true // マッチが成功したらフラグを立てる
     }
     ...
 }
@@ -251,8 +251,7 @@ func (m *machine) step(...) {
 
 ### カバレッジの計算
 
-テストケースを食わせたあとで通った命令を数える
-
+テストケースを食わせてフラグの立った命令を数える
 
 ```
 func (re *Regexp) Coverage() (int, int) {
@@ -286,15 +285,15 @@ func main() {
 ```
 
 ```plain
-7 / 9　
+7 / 9
 ```
 
-※今回は文字マッチ命令だけ数えた
+※文字マッチ命令の 成功 / 全部 を数えた場合
 
 ---
 
 ### まとめ
 
 * 正規表現のカバレッジは（頑張れば）測れる
-* Golangの正規表現実装はわりと簡単に読める
+* Golangの正規表現実装は読みやすい
 * テスト回のはずが正規表現回になった
