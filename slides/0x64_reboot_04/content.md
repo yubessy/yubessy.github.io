@@ -66,7 +66,7 @@ class: center, middle
 
 ---
 
-## JSON
+## JSON が扱える
 
 * JSONのパース・値抽出ができる
 * 関数・仮想テーブルとして使う
@@ -91,14 +91,36 @@ FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
 
 ---
 
-## CSV
-
+## CSV を読める
 
 ---
 
-## WITH RECURSIVE SELECT
+## 全文検索ができる
 
-* MySQLすら8.0まで無かった WITH RECURSIVE
+* LIKEとかではなくちゃんと転置インデックスしてる
+* フレーズ検索もできる
+* 公式: http://www.sqlite.org/fts5.html
+
+```sql
+CREATE VIRTUAL TABLE iamacat USING fts5(sent TEXT);
+INSERT INTO iamacat VALUES
+  ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
+  ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
+  ('何でも 薄暗い じめじめ した 所 で ニャーニャー 泣いて いた 事 だけ は 記憶 して いる 。'),
+  ('吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。')
+;
+SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+-- 吾輩 は 猫 で ある。名前 は まだ 無い 。
+-- 吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
+SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+-- どこ で 生れ た か とんと 見当 が つか ぬ 。
+```
+
+---
+
+## チューリング完全
+
+* MySQLすら8.0まで無かった WITH RECURSIVE が使える
 * つまり SQLite は **チューリング完全** ﾋｬｯﾊｰ!
 * 公式: https://sqlite.org/lang_with.html
 
@@ -124,26 +146,9 @@ SELECT group_concat(rtrim(t),x'0a') FROM a;
 
 ---
 
-## 全文検索拡張 FTS5
+class: center, middle
 
-* LIKEとかではなくちゃんと転置インデックスしてる
-* フレーズ検索もできる
-* 公式: http://www.sqlite.org/fts5.html
-
-```sql
-CREATE VIRTUAL TABLE iamacat USING fts5(sent TEXT);
-INSERT INTO iamacat VALUES
-  ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
-  ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
-  ('何でも 薄暗い じめじめ した 所 で ニャーニャー 泣いて いた 事 だけ は 記憶 して いる 。'),
-  ('吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。')
-;
-SELECT * FROM iamacat WHERE sent MATCH '吾輩';
--- 吾輩 は 猫 で ある。名前 は まだ 無い 。
--- 吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
-SELECT * FROM iamacat WHERE sent MATCH '吾輩';
--- どこ で 生れ た か とんと 見当 が つか ぬ 。
-```
+## demo
 
 ---
 
