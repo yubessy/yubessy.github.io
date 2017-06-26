@@ -28,26 +28,33 @@ class: center, middle
 
 ## みんな知ってる SQLite
 
-* 軽量RDBMS
-  * サーバ不要
-  * データは単一ファイルorインメモリ
-  * 様々な言語からライブラリとして使える
-* RDBMSの基本機能をひと通りもつ
-  * CRUD
-  * JOIN
-  * 型: NULL, INTEGER, REAL, TEXT, BLOB
+#### 軽量RDBとして
+
+* サーバ不要
+* データは単一ファイルorインメモリ
+* 様々な言語からライブラリとして使える
+
+#### RDBの基本機能はひと通りもつ
+
+* CRUD
+* JOIN
+* 型: NULL, INTEGER, REAL, TEXT, BLOB
 
 ---
 
 ## 知ってるかもね SQLite
 
+#### ライセンス
+
 * **パブリックドメイン**
 * 様々なアプリケーションに組み込まれている
   * iOS(CoreData), Android
   * WebSQL(凍結), IndexedDB
-* 実はちゃっかり高機能
-  * トランザクション（スレッドセーフ）
-  * VIEW, TEMP TABLE, TRIGGER, ...
+
+#### 実はちゃっかり高機能
+
+* トランザクション（スレッドセーフ）
+* VIEW, TEMP TABLE, TRIGGER, ...
 
 ---
 
@@ -92,8 +99,8 @@ FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
 ## WITH RECURSIVE SELECT
 
 * MySQLすら8.0まで無かった WITH RECURSIVE
-* つまり -> SQLite3 は **チューリング完全** ﾋｬｯﾊｰ!
-* 公式 -> https://sqlite.org/lang_with.html
+* つまり SQLite は **チューリング完全** ﾋｬｯﾊｰ!
+* 公式: https://sqlite.org/lang_with.html
 
 ```sql
 WITH RECURSIVE
@@ -117,14 +124,14 @@ SELECT group_concat(rtrim(t),x'0a') FROM a;
 
 ---
 
-## 全文検索拡張 FTS3, FTS4
+## 全文検索拡張 FTS5
 
 * LIKEとかではなくちゃんと転置インデックスしてる
 * フレーズ検索もできる
-* 公式 -> http://www.sqlite.org/fts3.html
+* 公式: http://www.sqlite.org/fts5.html
 
 ```sql
-CREATE VIRTUAL TABLE iamacat USING fts3(sent TEXT);
+CREATE VIRTUAL TABLE iamacat USING fts5(sent TEXT);
 INSERT INTO iamacat VALUES
   ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
   ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
@@ -154,7 +161,9 @@ class: center, middle
 
 class: center, middle
 
-### おめでとう！ SQLite3 は SQLite4 にしんかした！
+### おめでとう！ SQLite3 は
+
+### SQLite4 にしんかした！
 
 ---
 
@@ -162,13 +171,36 @@ class: center, middle
 
 * 2016年に構想発表
   * SQLite3 が2004年に発表されてから実に13年
+* 2017年現在、まだ設計段階
+  * リリース時期も(たぶん)未定
+  * 公式: https://sqlite.org/src4/doc/trunk/www/design.wiki
+* 今のところ大きな機能追加はない
+  * どちらかと言えば内部実装の改善
 * 3のリプレースではなく共存を目指す
-* SQLite3 との主な違い
-* 乞うご期待！！！
+
+---
+
+## SQLite3 との主な違い
+
+1. 実行環境オブジェクト
+  * 接続をより厳格に管理・同一プロセスから複数接続
+2. 単純化されたKey/Valueストレージエンジン
+  * ストレージエンジンがプラガブルに
+3. `PRIMARY KEY` が本当にプライマリキーに
+  * SQLite3 ではただのユニークキー制約だった
+4. 10進数
+  * Cの `double` や `float` を使わないことで環境間差異を無くす
+5. 外部キー制約と再帰的なトリガーがデフォルトに
+6. 明示的な Index Cover
+
+#### 乞うご期待！！！
 
 ---
 
 ### おまけ: Homebrewで拡張モジュールを使う
+
+* JSONや全文検索はデフォルトではビルドされない
+* `--with-xxx` が必要
 
 ```shell-session
 $ brew info sqlite3
