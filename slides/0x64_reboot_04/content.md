@@ -1,17 +1,24 @@
+class: center, middle
+
+# SQLite4
+
+@yubessy
+
+0x64物語 Reboot #04 "RDB"
+
+---
 
 class: center, middle
 
-# Title
+![sqlite](sqlite.gif)
 
 ---
 
-# Agenda
+class: center, middle
 
-1. Introduction
-2. Deep-dive
-3. ...
+# 4!!!
 
 ---
 
-# Introduction
+#
 
