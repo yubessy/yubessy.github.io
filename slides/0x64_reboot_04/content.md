@@ -91,7 +91,16 @@ FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
 
 ---
 
-## CSV を読める
+## CSV にクエリを打てる
+
+* CSVファイルに対する高速なクエリエンジンとして使うことができる
+*
+
+```
+.load ./csv
+CREATE VIRTUAL TABLE temp.t1 USING csv(filename='thefile.csv');
+SELECT * FROM t1;
+```
 
 ---
 
