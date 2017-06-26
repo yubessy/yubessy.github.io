@@ -62,7 +62,7 @@ class: center, middle
 ## JSON
 
 * JSONのパース・値抽出ができる
-* 関数または仮想テーブルとして提供
+* 関数・仮想テーブルとして使う
   * プリミティブなデータ型ではない
 
 ```sql
@@ -168,9 +168,9 @@ class: center, middle
 
 ---
 
-## おまけ: Homebrewで拡張モジュールを使う
+### おまけ: Homebrewで拡張モジュールを使う
 
-```
+```shell-session
 $ brew info sqlite3
 ...
 ==> Options
