@@ -2,9 +2,9 @@ class: center, middle
 
 # あなたの知らない SQLite
 
-@yubessy
+#### @yubessy
 
-0x64物語 Reboot #04 "RDB"
+#### 0x64物語 Reboot #04 "RDB"
 
 ---
 
@@ -42,7 +42,7 @@ class: center, middle
 
 ---
 
-## 知ってるかもね SQLite
+## たぶん知ってる SQLite
 
 #### ライセンス
 
@@ -132,7 +132,7 @@ class: center, middle
 
 ## チューリング完全
 
-* MySQLすら8.0まで無かった WITH RECURSIVE が使える
+* MySQLすら8.0まで無かった `WITH RECURSIVE` が使える
 * つまりSQLiteは **チューリング完全** ﾋｬｯﾊｰ!
 * 公式: https://sqlite.org/lang_with.html
 
