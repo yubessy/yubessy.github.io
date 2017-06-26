@@ -10,6 +10,18 @@ class: center, middle
 
 class: center, middle
 
+### サーバレス流行ってるよね
+
+---
+
+class: center, middle
+
+### RDBでサーバレスと言えば？
+
+---
+
+class: center, middle
+
 ![sqlite](sqlite.gif)
 
 ---
@@ -21,21 +33,21 @@ class: center, middle
   * データは単一ファイルorインメモリ
   * 様々な言語からライブラリとして使える
 * RDBMSの基本機能をひと通りもつ
+  * CRUD
+  * JOIN
   * 型: NULL, INTEGER, REAL, TEXT, BLOB
-  * トランザクション（スレッドセーフ）
 
 ---
 
-## もしかしたら知ってる SQLite
+## 知ってるかもね SQLite
 
 * **パブリックドメイン**
 * 様々なアプリケーションに組み込まれている
   * iOS(CoreData), Android
   * WebSQL(凍結), IndexedDB
 * 実はちゃっかり高機能
-  * VIEW
-  * TRIGGER
-  * TEMP TABLE
+  * トランザクション（スレッドセーフ）
+  * VIEW, TEMP TABLE, TRIGGER, ...
 
 ---
 
@@ -47,11 +59,41 @@ class: center, middle
 
 ---
 
-## WITH RECURSIVE
+## JSON
+
+* JSONのパース・値抽出ができる
+* 関数または仮想テーブルとして提供
+  * プリミティブなデータ型ではない
+
+```sql
+SELECT json_extract(json('{"c":3, "d":4}'), '$.c');
+-- 3
+
+CREATE TABLE json_tbl (j JSON);
+INSERT INTO json_tbl VALUES
+  (json('{"attrs": {"a": 1, "b": 2}, "values": [1, 3, 5]}')),
+  (json('{"attrs": {"a": 3, "c": 4}, "values": [2, 4, 6]}')),
+  (json('{"attrs": null, "values": []}'))
+;
+SELECT tree.value
+FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
+;
+-- 3
+-- 4
+```
+
+---
+
+## CSV
+
+
+---
+
+## WITH RECURSIVE SELECT
 
 * MySQLすら8.0まで無かった WITH RECURSIVE
 * つまり -> SQLite3 は **チューリング完全** ﾋｬｯﾊｰ!
-* 公式ドキュメントより https://sqlite.org/lang_with.html
+* 公式 -> https://sqlite.org/lang_with.html
 
 ```sql
 WITH RECURSIVE
@@ -73,3 +115,74 @@ WITH RECURSIVE
 SELECT group_concat(rtrim(t),x'0a') FROM a;
 ```
 
+---
+
+## 全文検索拡張 FTS3, FTS4
+
+* LIKEとかではなくちゃんと転置インデックスしてる
+* フレーズ検索もできる
+* 公式 -> http://www.sqlite.org/fts3.html
+
+```sql
+CREATE VIRTUAL TABLE iamacat USING fts3(sent TEXT);
+INSERT INTO iamacat VALUES
+  ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
+  ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
+  ('何でも 薄暗い じめじめ した 所 で ニャーニャー 泣いて いた 事 だけ は 記憶 して いる 。'),
+  ('吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。')
+;
+SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+-- 吾輩 は 猫 で ある。名前 は まだ 無い 。
+-- 吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
+SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+-- どこ で 生れ た か とんと 見当 が つか ぬ 。
+```
+
+---
+
+class: center, middle
+
+### ・・・おや！？ SQLite3 のようすが・・・！
+
+---
+
+class: center, middle
+
+![](sqlite4.png)
+
+---
+
+class: center, middle
+
+### おめでとう！ SQLite3 は SQLite4 にしんかした！
+
+---
+
+## SQLite4
+
+* 2016年に構想発表
+  * SQLite3 が2004年に発表されてから実に13年
+* 3のリプレースではなく共存を目指す
+* SQLite3 との主な違い
+* 乞うご期待！！！
+
+---
+
+## おまけ: Homebrewで拡張モジュールを使う
+
+```
+$ brew info sqlite3
+...
+==> Options
+...
+--with-fts
+	Enable the FTS3 module
+...
+-with-json1
+	Enable the JSON1 extension
+...
+
+$ brew install sqlite3 --with-json1 --with-fts
+
+$ brew link --force sqlite3
+```
