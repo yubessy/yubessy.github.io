@@ -216,22 +216,19 @@ class: center, middle
 
 ### おまけ: Homebrewで拡張モジュールを使う
 
-* JSONや全文検索はデフォルトではビルドされない
-* `--with-xxx` が必要
+* JSONや全文検索はデフォルトではビルドに含まれない
+* `--with-xxx` をつけてインストール
 
 ```shell-session
 $ brew info sqlite3
-...
 ==> Options
-...
---with-fts
-	Enable the FTS3 module
-...
--with-json1
+--with-fts5
+	Enable the FTS5 module
+--with-json1
 	Enable the JSON1 extension
 ...
 
-$ brew install sqlite3 --with-json1 --with-fts
+$ brew install sqlite3 --with-json1 --with-fts5
 
 $ brew link --force sqlite3
 ```
