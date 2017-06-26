@@ -14,7 +14,7 @@ class: center, middle
 
 ---
 
-# みんな知ってる SQLite
+## みんな知ってる SQLite
 
 * 軽量RDBMS
   * サーバ不要
@@ -26,7 +26,7 @@ class: center, middle
 
 ---
 
-# もしかしたら知ってる SQLite
+## もしかしたら知ってる SQLite
 
 * **パブリックドメイン**
 * 様々なアプリケーションに組み込まれている
@@ -47,12 +47,11 @@ class: center, middle
 
 ---
 
-# WITH RECURSIVE
+## WITH RECURSIVE
 
 * MySQLすら8.0まで無かった WITH RECURSIVE
-* つまり -> SQLite3 は**チューリング完全**
-* 公式ドキュメントより引用
-  * https://sqlite.org/lang_with.html
+* つまり -> SQLite3 は **チューリング完全** ﾋｬｯﾊｰ!
+* 公式ドキュメントより https://sqlite.org/lang_with.html
 
 ```sql
 WITH RECURSIVE
