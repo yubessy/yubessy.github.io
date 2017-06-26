@@ -73,20 +73,19 @@ class: center, middle
   * プリミティブなデータ型ではない
 
 ```sql
-SELECT json_extract(json('{"c":3, "d":4}'), '$.c');
--- 3
+> SELECT json_extract(json('{"c":3, "d":4}'), '$.c');
+3
 
-CREATE TABLE json_tbl (j JSON);
-INSERT INTO json_tbl VALUES
-  (json('{"attrs": {"a": 1, "b": 2}, "values": [1, 3, 5]}')),
-  (json('{"attrs": {"a": 3, "c": 4}, "values": [2, 4, 6]}')),
-  (json('{"attrs": null, "values": []}'))
-;
-SELECT tree.value
-FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
-;
--- 3
--- 4
+> CREATE TABLE json_tbl (j JSON);
+> INSERT INTO json_tbl VALUES
+    (json('{"attrs": {"a": 1, "b": 2}, "values": [1, 3, 5]}')),
+    (json('{"attrs": {"a": 3, "c": 4}, "values": [2, 4, 6]}')),
+    (json('{"attrs": null, "values": []}'));
+
+> SELECT tree.value
+  FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree;
+3
+4
 ```
 
 ---
@@ -96,10 +95,12 @@ FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
 * CSVファイルに対する高速なクエリエンジンとして使うことができる
 * 拡張モジュールとして提供
 
-```
-.load ./csv
-CREATE VIRTUAL TABLE temp.t1 USING csv(filename='thefile.csv');
-SELECT * FROM t1;
+```sql
+> .load ./csv
+
+> CREATE VIRTUAL TABLE tbl USING csv(filename='example.csv');
+
+> SELECT * FROM tbl;
 ```
 
 ---
@@ -111,18 +112,20 @@ SELECT * FROM t1;
 * 公式: http://www.sqlite.org/fts5.html
 
 ```sql
-CREATE VIRTUAL TABLE iamacat USING fts5(sent TEXT);
-INSERT INTO iamacat VALUES
-  ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
-  ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
-  ('何でも 薄暗い じめじめ した 所 で ニャーニャー 泣いて いた 事 だけ は 記憶 して いる 。'),
-  ('吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。')
-;
-SELECT * FROM iamacat WHERE sent MATCH '吾輩';
--- 吾輩 は 猫 で ある。名前 は まだ 無い 。
--- 吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
-SELECT * FROM iamacat WHERE sent MATCH '吾輩';
--- どこ で 生れ た か とんと 見当 が つか ぬ 。
+> CREATE VIRTUAL TABLE iamacat USING fts5(sent TEXT);
+> INSERT INTO iamacat VALUES
+    ('吾輩 は 猫 で ある。名前 は まだ 無い 。'),
+    ('どこ で 生れ た か とんと 見当 が つか ぬ 。'),
+    ('何でも 薄暗い じめじめ した 所 で ニャーニャー 泣いて いた 事 だけ は 記憶 して いる 。'),
+    ('吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。')
+  ;
+
+> SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+吾輩 は 猫 で ある。名前 は まだ 無い 。
+吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
+
+> SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+どこ で 生れ た か とんと 見当 が つか ぬ 。
 ```
 
 ---
