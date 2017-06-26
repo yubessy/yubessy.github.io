@@ -37,7 +37,7 @@ class: center, middle
 #### RDBの基本機能はひと通りもつ
 
 * CRUD
-* JOIN
+* インデックス, JOIN
 * 型: NULL, INTEGER, REAL, TEXT, BLOB
 
 ---
@@ -94,7 +94,7 @@ FROM json_tbl, json_tree(json_tbl.j, '$.values[1]') AS tree
 ## CSV にクエリを打てる
 
 * CSVファイルに対する高速なクエリエンジンとして使うことができる
-*
+* 拡張モジュールとして提供
 
 ```
 .load ./csv
