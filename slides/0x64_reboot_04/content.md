@@ -66,7 +66,7 @@ class: center, middle
 
 ---
 
-## JSON が扱える
+## JSONが扱える
 
 * JSONのパース・値抽出ができる
 * 関数・仮想テーブルとして使う
@@ -90,7 +90,7 @@ class: center, middle
 
 ---
 
-## CSV にクエリを打てる
+## CSVにクエリを打てる
 
 * CSVファイルに対する高速なクエリエンジンとして使うことができる
 * 拡張モジュールとして提供
@@ -124,7 +124,7 @@ class: center, middle
 吾輩 は 猫 で ある。名前 は まだ 無い 。
 吾輩 は ここ で 始めて 人間 と いう もの を 見 た 。
 
-> SELECT * FROM iamacat WHERE sent MATCH '吾輩';
+> SELECT * FROM iamacat WHERE sent MATCH 'どこ 見当';
 どこ で 生れ た か とんと 見当 が つか ぬ 。
 ```
 
@@ -133,7 +133,7 @@ class: center, middle
 ## チューリング完全
 
 * MySQLすら8.0まで無かった WITH RECURSIVE が使える
-* つまり SQLite は **チューリング完全** ﾋｬｯﾊｰ!
+* つまりSQLiteは **チューリング完全** ﾋｬｯﾊｰ!
 * 公式: https://sqlite.org/lang_with.html
 
 ```sql
@@ -187,7 +187,7 @@ class: center, middle
 ## SQLite4
 
 * 2016年に構想発表
-  * SQLite3 が2004年に発表されてから実に13年
+  * 3が2004年に発表されてから実に12年
 * 2017年現在、まだ設計段階
   * リリース時期も(たぶん)未定
   * 公式: https://sqlite.org/src4/doc/trunk/www/design.wiki
@@ -197,14 +197,14 @@ class: center, middle
 
 ---
 
-## SQLite3 との主な違い
+## SQLite3との主な違い
 
 1. 実行環境オブジェクト
   * 接続をより厳格に管理・同一プロセスから複数接続
 2. 単純化されたKey/Valueストレージエンジン
   * ストレージエンジンがプラガブルに
 3. `PRIMARY KEY` が本当にプライマリキーに
-  * SQLite3 ではただのユニークキー制約だった
+  * 3ではただのユニークキー制約だった
 4. 10進数
   * Cの `double` や `float` を使わないことで環境間差異を無くす
 5. 外部キー制約と再帰的なトリガーがデフォルトに
