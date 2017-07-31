@@ -14,9 +14,7 @@ class: center, middle
 
 ---
 
-## 僕とRails
-
-#### Railsのエッセンス
+## Rails
 
 * Ruby
 * MVC
@@ -41,20 +39,24 @@ class: center, middle
 
 * モデル(RDB)がない
 
-#### -> MVCの限界
+#### -> MVCが適しない形態の増加
 
 ---
 
 ## chatbot
 
-TODO: 写真
+<img src="line-bot.png" width="720" />
 
 ---
 
-## よくあるmessaging platform
+## chatbotの裏側
 
-* LINE Messaging API
-* Facebook Messenger Platform
+* LINE Messaging API / Facebook Messenger Platform
+* 双方向・非同期な通信
+
+.center[
+    ![](chatbot-platform.png)
+]
 
 ---
 
@@ -78,29 +80,19 @@ TODO: 写真
 
 ## ワーカーによる非同期処理
 
-TODO: 図
+* RailsならActive Jobとか
 
----
-
-## ワーカーによる非同期処理
-
-#### webhook receiver
-
-* workerに処理を投げる
-* webhookに即レス
-
-#### worker
-
-* やっていく
-* 終わったら返信する
+.center[
+    ![](worker.png)
+]
 
 ---
 
 ## chatbotでの難点
 
-#### サーバーの負荷管理
+#### ワークロード管理
 
-* 負荷傾向の異なる処理
+* 負荷の性質がそれぞれ異なる
     * receiver: 大量のリクエストを高速にさばく
     * worker: 重い処理
 * -> 分散型ジョブキュー等でサーバを別にしたり
@@ -109,34 +101,33 @@ TODO: 図
 
 * 非同期処理
 * webhookを受け取るパブリックエンドポイント
-    * ローカルデバッグができない
+    * **ローカルデバッグができない**
 
 ---
 
 ## そこで: サーバーレス
 
-TODO: 図
+（すでに誰か説明してると信じて）
 
-（すでに誰か説明してるはず）
-
-* Lambdaがwebhookを受けてSQSに積む
-* workerがSQSをデキューして処理
+.center[
+    ![](serverless.png)
+]
 
 ---
 
 ## サーバーレスの利点
 
-#### 負荷分散
+#### ワークロード管理
 
 * 大量のWebhookも楽にさばける
 
 #### デバッグ
 
-* LambdaはSQSに積んで200返すだけ
+* functionはenqueして200を返すだけ
     * テスト頑張らなくていい
 * workerはサーバーレスでなくてもよい
-    * DBコネクションプール等が要るなら普通のサーバーにする
-    * SQSを挟むのでパブリックエンドポイントが不要
+    * DBコネクションプールしたければ普通のサーバーで
+    * deque以降のデバッグだけならパブリックエンドポイントが不要
     * -> **ローカルデバッグができる！！**
 
 ---
@@ -146,6 +137,8 @@ TODO: 図
 * 諸般の事情によりFacebook Messenger
 * 諸般の事情によりAzure Functions
 * 諸般の事情によりAzure Service Bus
+
+※AWSならAPI Gateway + Lambda + SQSでいけると思う
 
 ---
 
