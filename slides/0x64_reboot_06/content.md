@@ -187,3 +187,11 @@
 * だいたいこの本に書いてる
 
 <img src="la-book.jpg" height="400"/>
+
+---
+
+### 参考
+
+* [Lambda Architecture » λ lambda-architecture.net](http://lambda-architecture.net/)
+* [Lambda Architecture with Apache Spark - DZone Big Data](https://dzone.com/articles/lambda-architecture-with-apache-spark)
+* [O'Reilly Japan - スケーラブルリアルタイムデータ分析入門](https://www.oreilly.co.jp/books/9784873117751/)
