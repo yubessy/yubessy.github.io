@@ -96,6 +96,7 @@
 ### 全貌
 
 ![](la-overview.png)
+<small>https://dzone.com/articles/lambda-architecture-with-apache-spark</small>
 
 ---
 
@@ -164,18 +165,18 @@
 #### Livesense Analytics と Lambda Architecture
 
 * アクセスログテーブルの生成バッチで導入
-* マスタデータ(Amazon S3)
+* マスタデータ (S3)
   * (ユーザID, タイムスタンプ, URL) のみを保持
-* バッチビュー(Apache Spark on Amazon EMR)
+* バッチビュー (Spark on EMR)
   * visit_id や page_type などはこちらで生成
 * リアルタイムビュー: 作ってない
-* 読んでね
+* 詳しくは↓で
   * [データ分析を支える「便利カラム」の問題点とその解決策 - LIVESENSE made*](http://made.livesense.co.jp/entry/2017/04/18/090000)
 
 ---
 
 ### まとめ
 
-* 詳しくは↓をどうぞ
+* だいたいこの本に書いてる
 
 <img src="la-book.jpg" height="400"/>
