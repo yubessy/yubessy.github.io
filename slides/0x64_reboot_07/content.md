@@ -135,7 +135,7 @@
 |       | Encoding    |   A   |   B   |   B   |   A   |   B   |
 |       | Qubits      |  `0`  |  `+`  |  `-`  |  `1`  |  `+`  |
 | Bob   | Measurement |   α   |   α   |   β   |   β   |   α   |
-|       | Key Bits    |  `0`  |  `1`  |  `1`  |  `1`  |  `1`  |
+|       | Key Bits    |   0   |   1   |   1   |   1   |   1   |
 
 ---
 
