@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>良い木とは何か</title>
+    <meta charset="utf-8">
+    <link href="style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured"></script>
+  </head>
+  <body>
+    <script>
+      var slideshow = remark.create({sourceUrl: 'content.md'});
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+      });
+      MathJax.Hub.Configured();
+    </script>
+  </body>
+</html>
