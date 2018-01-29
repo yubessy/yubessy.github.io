@@ -90,7 +90,6 @@ def fib(n: Long): Long = n match {
 ### 末尾再帰 (tail rec)
 
 ```scala
-@tailrec
 def fibImpl(n: Long, a: Long, b: Long): Long = n match {
   case 0 => a
   case _ => fibImpl(n - 1, b, a + b)
@@ -123,9 +122,9 @@ def fibS(n: Long): Long = n match {
 
 |              |       rec |tail rec|   mut rec |
 |--------------|----------:|-------:|----------:|
-| JAR          |  75508353 |    201 |  66573614 |
-| Native `-O0` | 169179486 |      6 | 167131268 |
-| Native `-O2` |  79689313 |      2 |  34402033 |
+| JAR          |  74801223 |    262 |  67248872 |
+| Native `-O0` | 168336051 |      4 | 164421481 |
+| Native `-O2` |  77311107 |      4 |  34026913 |
 
 * Native `-O0` (最適化無し)
   * rec, mute rec はJARより遅い. tail rec は爆速

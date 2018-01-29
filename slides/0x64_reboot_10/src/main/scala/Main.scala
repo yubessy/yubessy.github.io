@@ -1,4 +1,3 @@
-import scala.annotation.tailrec
 import scala.collection.mutable
 
 object NaiveFibonacci {
@@ -10,7 +9,6 @@ object NaiveFibonacci {
 }
 
 object TailCallFibonacci {
-  @tailrec
   def fibImpl(n: Long, a: Long, b: Long): Long = n match {
     case 0 => a
     case _ => fibImpl(n - 1, b, a + b)
