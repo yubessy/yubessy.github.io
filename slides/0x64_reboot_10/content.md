@@ -33,8 +33,8 @@
 ### 特長
 
 * LLVMを利用
-  * 最適化を効かせやすい
-  * 対応プラットフォームが多い
+  * 最適化機構を利用できる
+  * 多くのプラットフォームに対応
 * セルフホスティング(?)
   * Scala Native自体がScalaで実装
 * SBTプラグインとして提供
@@ -70,10 +70,11 @@ https://github.com/okapies/scala-native-example
   * 再帰
   * 末尾再帰
   * 相互再帰
+* ベンチ取ってみる
 
 ---
 
-### 再帰
+### 再帰 (rec)
 
 ```scala
 def fib(n: Long): Long = n match {
@@ -85,7 +86,7 @@ def fib(n: Long): Long = n match {
 
 ---
 
-### 末尾再帰
+### 末尾再帰 (tail rec)
 
 ```scala
 @tailrec
@@ -101,7 +102,7 @@ def fib(n: Long): Long = {
 
 ---
 
-### 相互再帰
+### 相互再帰 (mut rec)
 
 ```scala
 def fib(n: Long): Long = n match {
@@ -114,3 +115,24 @@ def fibS(n: Long): Long = n match {
   case _ => fib(n - 1) + fibS(n - 1)
 }
 ```
+
+---
+
+### ベンチ結果
+
+|              |       rec |tail rec|   mut rec |
+|--------------|----------:|-------:|----------:|
+| JAR          |  75508353 |    201 |  66573614 |
+| Native `-O0` | 169179486 |      6 | 167131268 |
+| Native `-O2` |  79689313 |      2 |  34402033 |
+
+* Native `-O0` (最適化無し)
+  * rec, mute rec はJARより遅い. tail rec は爆速
+* Native `-O2` (最適化有り)
+  * mute rec がJARを逆転
+
+---
+
+### まとめ
+
+* 今後に期待
