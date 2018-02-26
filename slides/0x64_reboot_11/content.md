@@ -132,9 +132,10 @@ function run() {
 
 ### まとめ
 
-~~フロントエンドじゃないという指摘はさておき~~
-
-* WebAssembly無くても線形回帰ぐらいはできる
+* WebAssembly 無くても線形回帰ぐらいはできる
 * スプレッドシートはグラフが作れるので便利
+* 実はフロントエンドではない
+  * Google App Script はサーバ実行
+* すみませんでした
 
 コード: https://github.com/yubessy/SpreadML
