@@ -60,7 +60,7 @@
 
 ```
   Z (fun f n -> if n == 0 then 1 else n * f(n - 1)) 3
-= (fun f n -> if n == 0 then 1 else n * f(n - 1)) (Z (fun g n -> if n == 0 then 1 else n * f(n - 1))) 3
+= (fun f n -> if n == 0 then 1 else n * f(n - 1)) (Z (fun f n -> if n == 0 then 1 else n * f(n - 1))) 3
 = (fun n -> if n == 0 then 1 else n * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(n - 1)) 3
 = if 3 == 0 then 1 else 3 * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(3 - 1)
 = 3 * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(2)
