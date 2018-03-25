@@ -10,15 +10,29 @@
 
 ---
 
+##### ※今日は珍しくJavaScript(ES6)でお送りします！
+
+---
+
 ### Q1. 階乗を計算せよ
 
 ---
 
 ### A1
 
+```
+for (var p = 1, n = 1; n <= 5; n++) p *= n;
+p;
+```
+
 ---
 
 ### Q2. ループを使わずに階乗を計算せよ
+
+```
+var f = n => n == 0 ? 1 : n * f(n - 1);
+f(5);
+```
 
 ---
 
@@ -33,57 +47,69 @@
 ### A3
 
 ```
-(fun g x -> (fun h y -> g (h h) y) (fun h y -> g (h h) y) x)(fun f n -> if n == 0 then 1 else n * f(n - 1))(5)
+(g => (x => g(y => x(x)(y)))(x => g(y => x(x)(y))))(f => n => n == 0 ? 1 : n * f(n - 1))(5)
 ```
 
 ---
 
 ### なぜこうなるのか
 
-最後の式は
+式を３つの部分に分けてみる
 
-`fun f n -> if n == 0 then 1 else n * f(n - 1)`
+```
+Z … g => (h => g(y => h(h)(y)))(h => g(y => h(h)(y)))
+g … f => n => n == 0 ? 1 : n * f(n - 1)
+x … 5
+```
 
-階乗の関数定義とよく似ている
+`g` は階乗の定義とよく似ている
 
-`fact = fun n -> if n == 0 then 1 else n * fact(n - 1)`
+```
+var f = n => n == 0 ? 1 : n * f(n - 1);
+```
 
-違いは関数定義ではなく **ラムダ式** であること
+違いは名前の付いた関数ではなく **ラムダ式** であること
 
 ---
 
 ### なぜこうなるのか
 
-ここでもし以下の式をみたすラムダ式 `Z` があれば・・・
-
-`Z g x = g (Z g) x`
+ここでもし `Z` が以下をみたすラムダ式なら？
 
 ```
-  Z (fun f n -> if n == 0 then 1 else n * f(n - 1)) 3
-= (fun f n -> if n == 0 then 1 else n * f(n - 1)) (Z (fun f n -> if n == 0 then 1 else n * f(n - 1))) 3
-= (fun n -> if n == 0 then 1 else n * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(n - 1)) 3
-= if 3 == 0 then 1 else 3 * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(3 - 1)
-= 3 * (Z (fun f n -> if n == 0 then 1 else n * f(n - 1)))(2)
+Z(g) = g(Z(g))
+```
+
+```
+  Z(f => n => n == 0 ? 1 : n * f(n - 1))(5)
+= (f => n => n == 0 ? 1 : n * f(n - 1))(Z(f => n => n == 0 ? 1 : n * f(n - 1)))(5)
+= (n => n == 0 ? 1 : n * (Z(f => n => n == 0 ? 1 : n * f(n - 1)))(n - 1))(5)
+= 5 == 0 ? 1 : 5 * (Z(f => n => n == 0 ? 1 : n * f(n - 1)))(5 - 1))
+= 5 * (Z(f => n => n == 0 ? 1 : n * f(n - 1)))(4))
 = ...
-= 3 * 2 * 1 * 1
+= 5 * 4 * 3 * 2 * 1
 ```
+
+※２行目以降の `Z(...)` は厳密には評価済み
 
 ---
 
 ### なぜこうなるのか
 
-前半の式はこの `Z` を満たす
+```
+Z … g => (h => g(y => h(h)(y)))(h => g(y => h(h)(y)))
+```
 
-`fun g x -> (fun h y -> g (h h) y) (fun h y -> g (h h) y) x`
+は実際に `Z(g) = g(Z(g))` をみたす
 
 ```
-  Z g x
-= (fun g x -> (fun h y -> g (h h) y) (fun h y -> g (h h) y) x) g x
-= (fun h y -> g (h h) y) (fun h y -> g (h h) y) x
-= g ((fun h y -> g (h h) y) (fun h y -> g (h h) y)) x
-= g ((fun h x -> g (h h) x) (fun h y -> g (h h) y)) x
-= g ((fun x -> g ((fun h y -> g (h h) y) (fun h y -> g (h h) y)) x)) x
-= g (Z g) x
+  Z(g)
+= (g => (h => g(y => h(h)(y)))(h => g(y => h(h)(y))))(g)
+= (h => g(y => h(h)(y)))(h => g(y => h(h)(y)))
+= (h => g(x => h(h)(x)))(h => g(y => h(h)(y)))
+= g(x => (h => g(y => h(h)(y)))(h => g(y => h(h)(y)))(x))
+= g((h => g(y => h(h)(y)))(h => g(y => h(h)(y)))
+= g(Z(g))
 ```
 
 ---
@@ -93,17 +119,17 @@
 よって以下の式は5の階乗を計算する
 
 ```
-(fun g x -> (fun h y -> g (h h) y) (fun h y -> g (h h) y) x)(fun f n -> if n == 0 then 1 else n * f(n - 1))(5)
+(g => (x => g(y => x(x)(y)))(x => g(y => x(x)(y))))(f => n => n == 0 ? 1 : n * f(n - 1))(5)
 ```
 
 このように無名関数のみで再帰に相当する計算を行うことを **無名再帰** という
-またZのような性質をもつ関数を **不動点コンビネータ** という
+また `Z` のような性質をもつ高階関数を **不動点コンビネータ** という
+先ほど紹介した `Z` は
 
 ---
 
-### ところで
+### ここまで
 
 ---
 
-### Zはどんな方を持つか？
-
+# へ～
