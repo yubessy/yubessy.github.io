@@ -194,10 +194,12 @@ http://matt.might.net/articles/js-church/
 本当は不動点コンビネータや自己適用コンビネータの
 **型** について勉強したかった（というかしてきた）
 
--> **1時間や2時間では到底済まない**ことが判明
+-> **1時間や2時間では済まない**ことが判明
 
--> 自主規制によりHaskellやOCamlではなくES6に
+-> 自主規制によりHaskellやOCamlは諦めてES6に
 
 興味ある人はこのへんをどうぞ
 
 https://en.wikipedia.org/wiki/Fixed-point_combinator#Type_for_the_Y_combinator
+
+http://okmij.org/ftp/Computation/fixed-point-combinators.html
