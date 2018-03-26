@@ -207,7 +207,7 @@ http://okmij.org/ftp/Computation/fixed-point-combinators.html
 
 ### toolbox
 
-#### OCaml
+#### OCaml (with `-rectypes`)
 
 ```ocaml
 fun f -> f f
