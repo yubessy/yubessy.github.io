@@ -207,11 +207,15 @@ http://okmij.org/ftp/Computation/fixed-point-combinators.html
 
 ### toolbox
 
+#### OCaml
+
 ```ocaml
 fun f -> f f
 fun g -> (fun h y -> g (h h) y) (fun h y -> g (h h) y)
 fun f n -> if n == 0 then 1 else n * f(n - 1)
 ```
+
+#### Haskell
 
 ```haskell
 \f -> f f
