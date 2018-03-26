@@ -202,3 +202,15 @@ http://matt.might.net/articles/js-church/
 https://en.wikipedia.org/wiki/Fixed-point_combinator#Type_for_the_Y_combinator
 
 http://okmij.org/ftp/Computation/fixed-point-combinators.html
+
+---
+
+### toolbox
+
+```ocaml
+fun f -> f f
+
+fun g -> (fun h y -> g (h h) y) (fun h y -> g (h h) y)
+
+fun f n -> if n == 0 then 1 else n * f(n -1)
+```
