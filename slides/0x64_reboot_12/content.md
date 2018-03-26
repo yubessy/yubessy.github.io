@@ -209,18 +209,16 @@ http://okmij.org/ftp/Computation/fixed-point-combinators.html
 
 ```ocaml
 fun f -> f f
-
 fun g -> (fun h y -> g (h h) y) (fun h y -> g (h h) y)
-
 fun f n -> if n == 0 then 1 else n * f(n - 1)
 ```
 
 ```haskell
 \f -> f f
+\g -> (\h -> g (out h h)) (In (\h -> g (out h h)))
+\f -> \n -> if n == 0 then 1 else n * f(n - 1)
 
 newtype Rec a = In { out :: Rec a -> a }
-
 \f -> (\x -> f (out x x)) (In (\x -> f (out x x)))
-
 \f -> \n -> if n == 0 then 1 else n * f(n - 1)
 ```
