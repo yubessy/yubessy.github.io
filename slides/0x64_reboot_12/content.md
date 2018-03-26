@@ -215,7 +215,7 @@ fun f n -> if n == 0 then 1 else n * f(n - 1)
 
 ```haskell
 \f -> f f
-\g -> (\h -> g (out h h)) (In (\h -> g (out h h)))
+\g -> (\h -> g (h h)) (\h -> g (h h))
 \f -> \n -> if n == 0 then 1 else n * f(n - 1)
 
 newtype Rec a = In { out :: Rec a -> a }
