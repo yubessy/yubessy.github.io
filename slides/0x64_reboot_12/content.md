@@ -195,7 +195,6 @@ http://matt.might.net/articles/js-church/
 **型** について勉強したかった（というかしてきた）
 
 -> **1時間や2時間では済まない**ことが判明
-
 -> 自主規制によりHaskellやOCamlは諦めてES6に
 
 興味ある人はこのへんをどうぞ
