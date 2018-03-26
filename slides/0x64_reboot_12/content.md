@@ -214,3 +214,11 @@ fun g -> (fun h y -> g (h h) y) (fun h y -> g (h h) y)
 
 fun f n -> if n == 0 then 1 else n * f(n - 1)
 ```
+
+```haskell
+newtype Rec a = In { out :: Rec a -> a }
+
+\f -> (\x -> f (out x x)) (In (\x -> f (out x x)))
+
+\f -> \n -> if n == 0 then 1 else n * f(n - 1)
+```
