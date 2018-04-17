@@ -10,15 +10,9 @@ text: text-scale(0.8), line-height(0.5)
 
 # Agenda
 
-- Part 1. Docker の基礎
-    - コンテナの起動・停止・破棄
-    - コンテナの様々な起動オプション
-    - 実行中のコンテナに対する操作
+- Part 1. Docker の基礎 ← **今日はここまで**
 - Part 2. Dockerfile の基礎
-    - イメージの作成
 - Part 3. Docker Compose の基礎
-    - docker-compose.yml の内容
-    - docker-compose コマンドの使い方
 
 ---
 
@@ -74,10 +68,7 @@ text: text-scale(0.8), line-height(0.5)
     - コンテナの様々な起動オプション
     - 実行中のコンテナに対する操作
 - Part 2. Dockerfile の基礎
-    - イメージの作成
 - Part 3. Docker Compose の基礎
-    - docker-compose.yml の内容
-    - docker-compose コマンドの使い方
 
 ---
 
@@ -216,10 +207,7 @@ docker container list               =>  docker ps    // !!
     - **コンテナの様々な起動オプション**
     - 実行中のコンテナに対する操作
 - Part 2. Dockerfile の基礎
-    - イメージの作成
 - Part 3. Docker Compose の基礎
-    - docker-compose.yml の内容
-    - docker-compose コマンドの使い方
 
 ---
 
@@ -388,10 +376,7 @@ $ docker run --port 8080:80 nginx    // => nginx が起動
     - コンテナの様々な起動オプション
     - **実行中のコンテナに対する操作**
 - Part 2. Dockerfile の基礎
-    - イメージの作成
 - Part 3. Docker Compose の基礎
-    - docker-compose.yml の内容
-    - docker-compose コマンドの使い方
 
 ---
 
@@ -472,10 +457,7 @@ docker container logs  =>  docker logs
     - コンテナの様々な起動オプション
     - 実行中のコンテナに対する操作
 - Part 2. Dockerfile の基礎
-    - イメージの作成
 - Part 3. Docker Compose の基礎
-    - docker-compose.yml の内容
-    - docker-compose コマンドの使い方
 
 ---
 
