@@ -316,11 +316,11 @@ PIYO=poyo
 
 ---
 
-# `--port` : ホストのポートをコンテナに接続
+# `--publish` : ホストのポートをコンテナに接続
 
 以下を実行してブラウザで [http://localhost:8080/](http://localhost:8080/) にアクセスすると・・・
 
-**`$ docker run --port 8080:80 nginx nginx -g ‘daemon; off'`**
+**`$ docker run --publish 8080:80 nginx nginx -g 'daemon off;'`**
 
 ## **Welcome to nginx!**
 
@@ -345,8 +345,8 @@ MySQLやRailsも同じようにポートを接続して起動できる
 イメージにはたいてい何らかのデフォルトコマンドが設定されている
 
 ```
-$ docker run -it ubuntu              // => bash が起動
-$ docker run --port 8080:80 nginx    // => nginx が起動
+$ docker run -it ubuntu                 // => bash が起動
+$ docker run --publish 8080:80 nginx    // => nginx が起動
 ```
 
 ---
@@ -364,7 +364,7 @@ $ docker run --port 8080:80 nginx    // => nginx が起動
 --interactive  =>  -i
 --volume       =>  -v
 --tty          =>  -t
---port         =>  -p
+--publish      =>  -p
 ```
 
 ---
