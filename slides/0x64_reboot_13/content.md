@@ -38,7 +38,7 @@ GCベースのOCamlに所有・借用モデルを導入！？
 
 ここでは「コピーや廃棄にコストがかかる値」のこと
 
-* (複雑な)構造体
+* 巨大・複雑な構造体
 * ファイルハンドラ
 * ソケット
 * ロック
@@ -62,18 +62,18 @@ GCベースのOCamlに所有・借用モデルを導入！？
 
 ---
 
-### リソース管理方式
-
-代表的になリソース管理方式
+### 代表的なリソース管理方式
 
 #### Garbage Collection (GC)
 
 実行中に随時不要なリソースを検出・解放
+
 Java, Go など多くの言語が採用
 
 #### Ownership and Borrowing (OB)
 
 実行前にプログラムを解析して解放処理を挿入
+
 Rust の他に一部のFP言語で linear type として採用
 
 ---
@@ -82,13 +82,15 @@ Rust の他に一部のFP言語で linear type として採用
 
 #### Garbage Collection
 
-* pros: プログラマがメモリ管理を考えなくて済む
-* cons: ランタイムの肥大化, Stop the World (STW)
+pros: プログラマがメモリ管理を考えなくて済む
+
+cons: ランタイムの肥大化, Stop the World (STW)
 
 #### Ownership and Borrowing
 
-* pros: ランタイムが小さい, STWなし
-* cons: 一定の知識が必要, 複雑な参照があると大変
+pros: ランタイムが小さい, STWなし
+
+cons: 一定の知識が必要, 複雑な参照があると大変
 
 ---
 
