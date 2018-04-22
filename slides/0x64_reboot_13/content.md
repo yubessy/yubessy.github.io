@@ -16,7 +16,7 @@
 
 ### 2018/03/07
 
-#### arXiv.org に突如現れた論文が(その手の)業界を席巻！
+#### 突如現れた論文が(僕の中で)話題に！
 
 ---
 
@@ -24,20 +24,19 @@
 
 ---
 
-### Resource polymorphism
+### Resource Polymorphism
 
-Author: Guillaume Munch-Maccagnoni (Inria)
+Guillaume Munch-Maccagnoni (Inria)
 
 > We present a resource-management model for ML-style programming languages, designed to be compatible with the OCaml philosophy and runtime model. ... It builds on the ownership-and-borrowing models of systems programming languages (Cyclone, C++11, Rust) and on linear types in functional programming (Linear Lisp, Clean, Alms).
 
-OCamlのランタイムGCに、Rustに代表される所有・借用モデルを導入！？
+GCベースのOCamlに所有・借用モデルを導入！？
 
 ---
 
-### Resource
+### リソース
 
-プログラミング言語理論において
-**リソース** = コピーや廃棄にコストがかかる値
+ここでは「コピーや廃棄にコストがかかる値」のこと
 
 * (複雑な)構造体
 * ファイルハンドラ
@@ -49,106 +48,113 @@ OCamlのランタイムGCに、Rustに代表される所有・借用モデルを
 
 ---
 
-### Resouce management
+### リソース管理
 
 リソースはプログラムの至るところで生成される
 
-もしリソースを適切に管理しなければ...？
-→ ヒープ領域の圧迫によりプログラムが簡単にOOMで死ぬ
+もしリソースを適切に解放しなければ？
 
-モダンな言語はたいてい**リソース管理**(RM)の仕組みを持つ
+* ヒープ領域を圧迫してプログラムがOOMで死ぬ
+* ファイルがロックされ他のプログラムが使えない
+
+こういった事態を防ぐため、モダンな言語は
+何かしらのリソース管理の仕組みをもつ
 
 ---
 
-### Resouce management
+### リソース管理方式
 
-RMの方式として代表的なもの
+代表的になリソース管理方式
 
-#### Garbage Collection
+#### Garbage Collection (GC)
 
-**実行中**に随時不要なリソースを検出・破棄する
+実行中に随時不要なリソースを検出・解放
 Java, Go など多くの言語が採用
 
-#### Ownership and Borrowing
+#### Ownership and Borrowing (OB)
 
-**実行前**にプログラムを解析してリソース破棄処理を挿入する
-Rust の他、一部の実験的なFP言語で linear type として採用
+実行前にプログラムを解析して解放処理を挿入
+Rust の他に一部のFP言語で linear type として採用
 
 ---
 
-### Why resource polymorphism ?
-
-GC, OBの一長一短
+### GC, OBの一長一短
 
 #### Garbage Collection
 
-* pros: プログラマがメモリ管理をしなくてよい
-* cons: ランタイムの肥大化, STW
+* pros: プログラマがメモリ管理を考えなくて済む
+* cons: ランタイムの肥大化, Stop the World (STW)
 
 #### Ownership and Borrowing
 
 * pros: ランタイムが小さい, STWなし
-* cons: 複雑な参照が扱いにくい
+* cons: 一定の知識が必要, 複雑な参照があると大変
 
 ---
 
-### Why resource polymorphism ?
+### GC, OBの併用は可能か？
 
-理想: 同じ言語の中で併用したい
+理想: 同じ言語の中でGC, OBを併用したい
 
 * 単純な値 → OBでコンパイル時に解決
 * 複雑な値 → GCで自動管理
 
-現実: RMはだいたい言語依存
+現実: リソース管理方式(RM)はたいてい言語依存
 
-* RM方式は言語の初期設計段階で決定
-* あとからRM方式を変えるのは困難
+* 言語の初期設計段階でどちらかを採用
+* 一旦採用したものをあとから変えるのが困難
 
-→ 言語の限界 = RMの限界という誤解
-e.g. Rust vs. Go
+→ 言語の限界 = RMの限界という誤解 (Rust vs. Go)
 
 ---
 
-### Why resource polymorphism ?
+### Resource Polymorphism
 
 言語研究者としてはこの問題をなんとかしたい
 
-ヒント: リソースは値 & 値には型がある
-アイデア: 値の型によってRM方式を選択できないか？
+ヒント: リソースは値であり、値には型がある
+
+アイデア: 値の**型**によってGC, OBを選択できないか？
 
 * GC型の値はGCで管理
 * OB型の値はOBで管理
 
----
-
-### Resource polymorphism explained
-
-実現への課題:
-
-* 異なる方式を同一ランタイム上で効率的に扱えるか？
-* 方式の異なる型同士の複合型をどう扱うか？
-
-Resource Polymorphism はこれを現実的に解決する
-以降はほんの触りだけを紹介
+これを **Resource Polymorphism** (RP) として提唱
 
 ---
 
-### Resource polymorphism explained
+### Resource Polymorphism
 
-３つの基本型を導入
+Resource Polymorphism の実現における課題
+
+* GC, OBの併用が実行の効率に影響しないか？
+* GC型とOB型の複合型をどのようにして扱うか？
+
+論文の成果:
+
+GCベースの言語に無理なくOBモデルを導入できる
+ことをOCamlによる実装例とともに示す
+
+以降はほんの触りだけ紹介
+
+---
+
+### Resource Polymorphism
+
+まず３つの基本型を導入
 
 * G型: GCで管理
 * O型: ownership モデルで管理
 * B型: borrowing モデルで管理
 
-基本型だけなら同一ランタイム内で使い分けるのもそう難しくない
+これだけなら同一ランタイム内で扱うのは難しくない
 
-* O型, B型はコンパイル時に破棄処理を挿入
+* O型, B型はコンパイル時に解放処理を挿入
 * G型のみGCで管理
 
 ---
 
-### Resource polymorphism explained
+### Resource Polymorphism
 
 問題は異なる基本型同士の複合型
 
@@ -158,31 +164,31 @@ Resource Polymorphism はこれを現実的に解決する
 
 複合型は無限に存在 → 個別に扱いを定義できない
 
-しかし、実は複合型は規則によって単純化して扱える！
+しかし実は少数のパターンをだけ考えればよい！
 
 ---
 
-### Resource polymorphism explained
+### Resource Polymorphism
 
 ![](gob.png)
 
-例えばG型とO型の直積 `G*O` はO型として処理できる
-= `G*O` の値もコンパイル時に破棄処理を挿入してよい
+例: G型とO型の直積型 `G*O` はO型として処理できる
+= `G*O` の値も ownership モデルで管理してよい
 
-特にO, B型と何らかの型の複合型からG型が生まれることはない
-= GCが必要になる箇所をかなり減らすことができる
+特にO, B型と他の型の複合型は `O`, `B`, `O+B` のいずれか
 
 これが(たぶん)一番のポイント
 
 ---
 
-### 論文は実装例含めてまだまだ続くが・・・
+#### ※論文はまだまだ続くが・・・
 
 ---
 
 ### まとめ
 
-* GCとOBの併用は人類の夢
-* Resource Polymorphism は型システムでこれを解決
-* GC言語に無理なくOBを導入できるとも捉えられる
-* あと5年くらいしたらトレンドになってるはず
+* GCとOBの一貫した統合は人類の悲願
+* RPでは型の力でこの実現を目指す
+* 実用上もGC言語にOBを導入する方法として有力
+* 先史時代 → Java帝国 → Rust登場 → **RP** ？
+* あと5年くらいしたらトレンドになってるかも？
