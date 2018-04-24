@@ -88,7 +88,7 @@ cons: ランタイムの肥大化, Stop the World (STW)
 
 #### Ownership and Borrowing (OB)
 
-pros: ランタイムが小さい, STWなし
+pros: ランタイムが小さい, STWしにくい
 
 cons: 一定の知識が必要, 複雑な参照があると大変
 
