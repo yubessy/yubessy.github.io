@@ -10,7 +10,7 @@ text: text-scale(0.8), line-height(0.5)
 
 # Agenda
 
-- Part 1. Docker の基礎 ← **今日はここまで**
+- Part 1. Docker の基礎
 - Part 2. Dockerfile の基礎
 - Part 3. Docker Compose の基礎
 
@@ -32,19 +32,6 @@ text: text-scale(0.8), line-height(0.5)
 
 ---
 
-# 用語
-
-- **コンテナ**
-    - プロセスとその実行環境 （filesystem, network, etc.） をカプセル化したもの
-- **メインプロセス**
-    - コンテナの中核となる単一のプロセス
-- **イメージ**
-    - コンテナをアーカイブし、データとしてやりとりできるようにしたもの
-- **ホスト**
-    - コンテナを動かすためのマシン（各自の Mac 等）
-
----
-
 # スライドのコマンド
 
 実際に入力してもらう部分は `$` または `#` から始まる
@@ -61,6 +48,12 @@ text: text-scale(0.8), line-height(0.5)
 
 ---
 
+[.header: alignment(center)]
+
+## Part 1. Docker の基礎
+
+---
+
 # Agenda
 
 - Part 1. Docker の基礎
@@ -69,6 +62,19 @@ text: text-scale(0.8), line-height(0.5)
     - 実行中のコンテナに対する操作
 - Part 2. Dockerfile の基礎
 - Part 3. Docker Compose の基礎
+
+---
+
+# 用語
+
+- **コンテナ**
+    - プロセスとその実行環境 （filesystem, network, etc.） をカプセル化したもの
+- **メインプロセス**
+    - コンテナの中核となる単一のプロセス
+- **イメージ**
+    - コンテナをアーカイブし、データとしてやりとりできるようにしたもの
+- **ホスト**
+    - コンテナを動かすためのマシン（各自の Mac 等）
 
 ---
 
@@ -450,18 +456,7 @@ docker container logs  =>  docker logs
 
 ---
 
-# Agenda
-
-- Part 1. Docker の基礎 ← **今日はここまで**
-    - コンテナの起動・停止・破棄
-    - コンテナの様々な起動オプション
-    - 実行中のコンテナに対する操作
-- Part 2. Dockerfile の基礎
-- Part 3. Docker Compose の基礎
-
----
-
-# おわりに
+# Part 1. はここまで
 
 起動したままのコンテナがあると思うので自分で停止してください
 
@@ -470,3 +465,286 @@ docker container logs  =>  docker logs
 一通り停止したら下記コマンドで停止済みコンテナを一括破棄できます
 
 `$ docker container prune`
+
+---
+
+[.header: alignment(center)]
+
+## Part 2. Dockerfile の基礎
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+    - **イメージのビルド**
+    - 主な命令
+    - Dockerfile のポイント
+- Part 3. Docker Compose の基礎
+
+---
+
+# 用語
+
+- **ビルドディレクトリ**
+    - ホストでイメージのビルド作業を行うディレクトリ (Dockerfile などを置く)
+- **ワーキングディレクトリ**
+    - ビルドコンテナ内のカレントディレクトリ
+- **ビルドキャッシュ**
+    - ビルド途中でイメージの内容をキャッシュしたもの
+
+---
+
+# イメージの取得方法
+
+イメージを取得する方法は２つ
+
+1. Webからダウンロードする ← Part 1. で紹介
+2. 自分で作る ← 今度はこちら
+
+自分で作る場合でも、普通は既存のイメージをベースにカスタマイズする
+
+これから使うサンプルをダウンロードしておく
+
+```
+$ git clone git@github.com:yubessy/docker-handson-example.git
+$ cd docker-handson-example
+```
+
+---
+
+# Dockerfile
+
+イメージの作成手順を記述するファイル（見たことがあるはず）
+
+```Dockerfile
+FROM python:3.6
+RUN groupadd appgroup && \
+    useradd --system --group appgroup appuser && \
+    mkdir /opt/myapp && \
+    chgrp -R appgroup /opt/myapp && \
+    chown -R appuser /opt/myapp && \
+    pip install flask
+COPY --chown=appuser:appgroup main.py /opt/myapp/main.py
+USER appuser
+WORKDIR /opt/myapp
+CMD ["python", "main.py"]
+```
+
+---
+
+# イメージのビルド
+
+以下のコマンドで Dockerfile からイメージをビルドできる
+
+**`$ docker image build --tag myapp:v0.0.1 .`**
+
+`--tag <name>:<tag>`: ビルドしたイメージに名前とタグを付与]
+
+`.`: ビルドディレクトリのパス
+
+コマンドとオプションは省略可能
+
+`$ docker build -t myapp:v0.0.1 .`
+
+---
+
+# ビルドしたイメージの利用
+
+ビルドしたイメージは普通のイメージと同じように使える
+
+**`$ docker run -p 8080:8080 myapp:v0.0.1`**
+
+ブラウザで http://localhost:8080/ にアクセスしてみる
+
+`main.py` のコードも見ておくこと
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+    - イメージのビルド
+    - **Dockerfile の主な命令**
+    - Dockerfile のポイント
+- Part 3. Docker Compose の基礎
+
+---
+
+# `FROM` : ベースイメージを指定
+
+ベースにするイメージを指定
+
+例: Python 3.6 製アプリケーションなら
+
+`FROM python3.6`
+
+原則として Dockerfile は `FROM` で書き始めなければならない
+
+---
+
+# `RUN` : コマンドを実行
+
+これを使ってベースイメージをカスタマイズしていく
+
+`&&` や `||` など、シェルスクリプトと同じ記法が使える
+
+例: apt-get で mysqlclient をインストール
+
+```
+RUN apt-get update && \
+    apt-get install -y mysqlclient
+```
+
+命令途中の改行は `\` で
+
+---
+
+# `COPY` : ファイルをイメージに含める
+
+ビルドディレクトリ以下の任意のファイルをイメージに含める
+
+`COPY example.txt /tmp/example.txt`
+
+`.` や `*` のようなパターンも使える
+
+`COPY . .`
+
+`--chown` でファイルのオーナーを変更することもできる
+
+`COPY --chown=appuser:appgroup main.py /opt/myapp/main.py`
+
+---
+
+# `USER`, `WORKDIR` : ユーザやディレクトリを切り替え
+
+コンテナ内の実行ユーザやワーキングディレクトリを切り替える
+
+```Dockerfile
+RUN echo `whoami`:`pwd`
+# root:/
+USER appuser
+WORKDIR /tmp
+RUN echo `whoami`:`pwd`
+# appuser:/tmp
+```
+
+`RUN` だけでなく `COPY` や `CMD` の実行ユーザも変わる
+
+ビルド中に `RUN` で `cd` や `su` は使えないことに注意！
+
+---
+
+# `CMD` : デフォルトコマンドを設定
+
+`docker run <image>` で実行されるコマンドを指定
+
+`["cmd", "arg1", "arg2"]` のような記法を推奨
+
+```Dockerfile
+FROM ubuntu:latest
+# 通常は bash が起動するが、それを上書きできる
+CMD ["echo", "hello"]
+```
+
+---
+
+# その他
+
+上に挙げたものはよく使う一部の命令のみで、他にも様々な命令がある
+
+* `ARG`
+* `ENTRYPOINT`
+
+詳しくは公式ドキュメントを参照
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+    - イメージのビルド
+    - Dockerfile の主な命令
+    - **Dockerfile のポイント**
+- Part 3. Docker Compose の基礎
+
+---
+
+# 開発中に変更されやすい命令を後に書く
+
+命令を１つ実行する毎にビルドキャッシュが生成されている
+
+これにより命令の実行結果が変わらない場合に２回目以降のビルドが速くなる
+
+→ 開発中に変更されやすい命令ほど後に書いたほうがビルドが速くなる
+
+```Dockerfile
+# main.py を編集するとしてキャッシュ1からビルドされる
+FROM python:3.6
+RUN pip install
+# => キャッシュ1
+COPY main.py /opt/myapp/main.py
+# => キャッシュ2
+```
+
+---
+
+# ひとつの `RUN` や `COPY` に複数コマンドをまとめる
+
+命令を１つ実行する毎にビルドキャッシュが生成されている
+
+→ 命令を細かく分けると無駄にビルドキャッシュが生成される
+
+→ ビルドが遅くなる・ディスクを圧迫する
+
+```Dockerfile
+# 良くない例
+RUN groupadd appgroup
+RUN useradd --system --group appgroup appuser
+RUN mkdir /opt/myapp
+RUN chgrp -R appgroup /opt/myapp
+RUN chown -R appuser /opt/myapp
+```
+
+---
+
+# 必要なファイルだけを `COPY` する
+
+`COPY . . ` などで複数のファイルをまとめてコピーするときは
+
+以下のようなコピーすると問題があるファイルに気をつける
+
+* `log/` : 開発中に生成されたたくさんのログ
+* `.env` : DBパスワードなどが書かれた環境設定
+
+これらをイメージに含めないよう `.dockerignore` を書いておく
+
+```
+log/
+.env
+```
+
+---
+
+# アプリケーション実行用のユーザを用意する
+
+例ではアプリケーション実行専用のユーザをわざわざ作っていた
+
+```Dockerfile
+FROM python:3.6
+RUN groupadd appgroup && \
+    useradd --system --group appgroup appuser
+# ...
+USER appuser
+```
+
+これがないと `root` でプロセスが実行され予期せぬ問題が発生することも
+
+---
+
+# Part 2. はここまで
+
+身近な `Dockerfile` を読んで、中でどんな処理を行っているか見てみてください
