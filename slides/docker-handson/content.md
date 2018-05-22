@@ -765,9 +765,8 @@ USER appuser
 - Part 2. Dockerfile の基礎
 - Part 3. Docker Compose の基礎
     - **Docker Compose とは**
-    - Service について
-    - Network について
-    - YAML のベストプラクティス
+    - Service と Network
+    - Docker Compose のベストプラクティス
 
 ---
 
@@ -786,14 +785,12 @@ USER appuser
 
 # 複数のコンテナを扱う理由
 
-コンテナが複数になると何ができる？
+複数のコンテナを操作できると何が嬉しい
 
-1. コンテナ同士がネットワークを介して通信できる
+1. ひとつずつ `docker run` とかせずに一度に起動できる
+    - 例: APコンテとDBコンテナを一度に起動
+2. コンテナ同士がネットワークを介して通信できる
     - 例: APコンテナがDBコンテナにクエリを発行
-2. 同一のコンテナを複数実行してジョブを並列化できる
-    - 例: ワーカーコンテナを複数起動
-
-今回はおもに 1. について解説
 
 --
 
@@ -802,18 +799,18 @@ USER appuser
 `docker-compose.yml` に複数のコンテナをまとめて定義する
 
 ```yaml
-version: '3' # バージョン
+version: '3' # ファイルフォーマットのバージョン
 services:
-  app: # アプリケーションのコンテナ
-    build: ./app # ./app/Dockerfile からイメージをビルド
+  app:
+    build: ./app
     ports:
-      - 3000:3000 # 3000番ポートをホストと接続
+      - 3000:3000
     depends_on:
       - db # コンテナの起動順をDBコンテナより後にする
   db:
     image: mysql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes' # root のパスワードを空にする
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 ```
 
 --
@@ -839,13 +836,12 @@ services:
 - Part 2. Dockerfile の基礎
 - Part 3. Docker Compose の基礎
     - Docker Compose とは
-    - **Service について**
-    - Network について
-    - YAML のベストプラクティス
+    - **サービスとネットワーク**
+    - Docker Compose のベストプラクティス
 
 ---
 
-# Service とは
+# サービスとは
 
 `docker-compose.yml` の `service`
 = 同一の設定から作成される１つ以上のコンテナの集合
@@ -857,15 +853,143 @@ version: '3' # バージョン
 services:
   app: # サービス名
     # 以下イメージ・コンテナの設定
-    build: ./app # ./app/Dockerfile からイメージをビルド
-    ports:
-      - 3000:3000 # 3000番ポートをホストと接続
-    depends_on:
-      - db # コンテナの起動順をDBコンテナより後にする
+    build: ./app
+    ports: ...
 ```
 
 ---
 
-# Service の設定 / `docker run` と対応する項目
+# サービスの主な設定
 
+`docker build|run|pull` などのコマンドの引数と対応するもの
 
+```yaml
+build:       # docker build <path> の path
+image:       # docker pull|run <image> の image
+command:     # docker run <image> <command> の command
+environment: # docker run --env
+env_file:    # docker run --env-file
+ports:       # docker run --publish
+volumes:     # docker run --volume
+stdin_open:  # docker run --interactive
+tty:         # docker run --tty
+```
+
+---
+
+# Docker Compose のネットワーク
+
+Docker Compose でまとめて起動されるサービスは
+デフォルトでは同一のネットワーク内に存在する
+
+サービス名がそのままホスト名になっているので
+他のコンテナから通信できる
+
+```yaml
+version: '3'
+services:
+  web-server:
+    image: nginx:latest
+  web-client:
+    image: ubuntu:latest
+    command: bash -c 'sleep 5; wget http://web-server/'
+    depends_on:
+      - web-server
+```
+
+---
+
+# 高度なネットワークの設定
+
+サービスを複数のネットワークに配置することも可能
+開発環境用途ではほぼ使用しないので参考程度に
+
+```yaml
+version: "3"
+services:
+  proxy:
+    build: ./proxy
+    networks: [frontend]
+  app:
+    build: ./app
+    networks: [frontend, backend]
+  db:
+    image: mysql
+    networks: [backend]
+networks:
+  frontend: {}
+  backend: {}
+```
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+- Part 3. Docker Compose の基礎
+    - Docker Compose とは
+    - サービスとネットワーク
+    - **Docker Compose のベストプラクティス**
+
+---
+
+# Git Submodule と組み合わせる
+
+複数レポジトリ構成の環境を `up` 一発で立ち上げられるように
+
+```
+.
+├── docker-compose.yml
+├── db       # DB初期化処理など
+├── frontend # フロント (Node.js) の git repo
+├── webapp   # Webアプリ (Rails) の git repo
+└── batchjob # バッチ処理 (Python) の git repo
+```
+
+---
+
+# 公式イメージの機能を活用する
+
+MySQLなどの公式イメージには様々な機能がある
+
+```yaml
+db:
+  image: mysql:5.7
+  volumes:
+    - ./db:/docker-entrypoint-initdb.d # DB初期化用SQLを自動実行
+  environment:
+    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'  # root のパスワードを空に
+```
+
+参考: https://hub.docker.com/_/mysql/
+
+---
+
+# YAML のアンカー・エイリアスを利用する
+
+YAMLにはアンカーとエイリアスによる参照機能がある
+`docker-compose.yml` の `x-` から始まる項目は自由に利用できる
+これらを組み合わせると長いファイル名を再利用したりできる
+
+```yaml
+version: '3.4'
+x-db-env-files: &db-env-files # エイリアス
+  - ./env/db.env
+  - ./env/db.secret
+services:
+  webapp:
+    ...
+    env_file: *db-env-files # アンカー
+  batchjob:
+    ...
+    env_file: *db-env-files # アンカー
+```
+
+---
+
+# Part 3. はここまで
+
+Part 1, 2, 3 で一通りのことはできるようになったはず
+
+今後は公式ドキュメントや本で勉強してください
