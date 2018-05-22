@@ -750,3 +750,122 @@ USER appuser
 # Part 2. はここまで
 
 身近な `Dockerfile` を読んで、中でどんな処理を行っているか見てみてください
+
+---
+
+[.header: alignment(center)]
+
+## Part 3. Docker Compose の基礎
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+- Part 3. Docker Compose の基礎
+    - **Docker Compose とは**
+    - Service について
+    - Network について
+    - YAML のベストプラクティス
+
+---
+
+# Docker Compose とは
+
+前回まで:
+
+- Part 1: 単一のコンテナの操作
+- Part 2: イメージの作成
+
+今回:
+
+- Part 3: **複数**のコンテナの操作
+
+---
+
+# 複数のコンテナを扱う理由
+
+コンテナが複数になると何ができる？
+
+1. コンテナ同士がネットワークを介して通信できる
+    - 例: APコンテナがDBコンテナにクエリを発行
+2. 同一のコンテナを複数実行してジョブを並列化できる
+    - 例: ワーカーコンテナを複数起動
+
+今回はおもに 1. について解説
+
+--
+
+# `docker-compose.yml` の基本
+
+`docker-compose.yml` に複数のコンテナをまとめて定義する
+
+```yaml
+version: '3' # バージョン
+services:
+  app: # アプリケーションのコンテナ
+    build: ./app # ./app/Dockerfile からイメージをビルド
+    ports:
+      - 3000:3000 # 3000番ポートをホストと接続
+    depends_on:
+      - db # コンテナの起動順をDBコンテナより後にする
+  db:
+    image: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes' # root のパスワードを空にする
+```
+
+--
+
+# `docker-compose` コマンドの基本
+
+`docker-compose.yml` の定義を元にコンテナやイメージを操作する
+
+- `docker-compose up`: コンテナをまとめて起動
+- `docker-compose down`: コンテナをまとめて終了・削除
+- `docker-compose run`: 特定のコンテナを単一で起動
+- `docker-compose exec`: 起動中のコンテナ内でコマンドを実行
+- `docker-compose build`: イメージをまとめて取得
+- `docker-compose pull`: イメージをまとめてビルド
+
+他にもたくさんあるので `docker-compose --help` で確認しておく
+
+---
+
+# Agenda
+
+- Part 1. Docker の基礎
+- Part 2. Dockerfile の基礎
+- Part 3. Docker Compose の基礎
+    - Docker Compose とは
+    - **Service について**
+    - Network について
+    - YAML のベストプラクティス
+
+---
+
+# Service とは
+
+`docker-compose.yml` の `service`
+= 同一の設定から作成される１つ以上のコンテナの集合
+
+※開発環境で使う場合はたいてい１サービス１コンテナ
+
+```yaml
+version: '3' # バージョン
+services:
+  app: # サービス名
+    # 以下イメージ・コンテナの設定
+    build: ./app # ./app/Dockerfile からイメージをビルド
+    ports:
+      - 3000:3000 # 3000番ポートをホストと接続
+    depends_on:
+      - db # コンテナの起動順をDBコンテナより後にする
+```
+
+---
+
+# Service の設定 / `docker run` と対応する項目
+
+
