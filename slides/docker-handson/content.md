@@ -765,7 +765,7 @@ USER appuser
 - Part 2. Dockerfile の基礎
 - Part 3. Docker Compose の基礎
     - **Docker Compose とは**
-    - Service と Network
+    - サービスとネットワーク
     - Docker Compose のベストプラクティス
 
 ---
@@ -823,8 +823,8 @@ services:
 - `docker-compose down`: コンテナをまとめて終了・削除
 - `docker-compose run`: 特定のコンテナを単一で起動
 - `docker-compose exec`: 起動中のコンテナ内でコマンドを実行
-- `docker-compose build`: イメージをまとめて取得
-- `docker-compose pull`: イメージをまとめてビルド
+- `docker-compose pull`: イメージをまとめて取得
+- `docker-compose build`: イメージをまとめてビルド
 
 他にもたくさんあるので `docker-compose --help` で確認しておく
 
