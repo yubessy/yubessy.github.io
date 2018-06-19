@@ -865,9 +865,9 @@ services:
 `docker build|run|pull` などのコマンドの引数と対応するもの
 
 ```yaml
-build:       # docker build <path> の path
-image:       # docker pull|run <image> の image
-command:     # docker run <image> <command> の command
+build:       # docker build <path> <- path
+image:       # docker pull|run <image> <- image
+command:     # docker run <image> <command> <- command
 environment: # docker run --env
 env_file:    # docker run --env-file
 ports:       # docker run --publish
