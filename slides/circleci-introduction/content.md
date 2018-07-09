@@ -225,7 +225,7 @@ jobs:
 
 # Docker イメージを選ぶ
 
-実行環境として使う Docker イメージを選ぶ
+実行環境として使う Docker イメージはよく考えて選ぶ
 
 各 Step のコマンドはひとつめのコンテナで実行されることに注意
 
@@ -238,14 +238,80 @@ docker:
 
 ---
 
-# 基礎編はここまで
+# Step は適切に分ける
 
-身近な `circle.yml` を読んでみよう
+Step は名前をつけやすいひとまとまりの処理
+
+```yaml
+- run:
+    name: setup env
+    command: |
+      python -m venv .venv
+      source .venv/bin/activate
+      pip install -r requirements.txt
+
+- run:
+    name: check code statically
+    command: |
+      source .venv/bin/activate
+      pep8 .
+      pyflakes .
+
+- run:
+    name: test
+    command: |
+      source .venv/bin/activate
+      unittest .  # test
+```
 
 ---
 
-# Workflow あれこれ
+# Step は適切に分ける
 
-- 複数の Job を直列・並列・分岐して実行
-- 特定の branch, tag の push 時のみ処理を変更
-- コードに変更がなくても cron で定期的に処理を実行
+```yaml
+# 良くない例: 全部まとめる
+- run:
+    name: CI
+    command: |
+      python -m venv .venv
+      source .venv/bin/activate
+      pip install -r requirements.txt
+      pep8 .
+      pyflakes .
+      unittest .
+
+# 良くない例: 1コマンドずつ全部分ける
+- run: pip install -r requirements.txt
+- run: pep8 .
+- run: pyflakes .
+- run: unittest .
+```
+
+---
+
+# Cache を適宜利用する
+
+ライブラリのインストールパスなどをキャッシュしておくと便利 (発展編で解説)
+
+```yaml
+- restore_cache: # キャッシュあればそこからディレクトリの内容を復元
+    key: requirements-{{ checksum "requirements.txt" }}
+
+- run: # 実行されるがディレクトリが復元されていれば実質的に何も起きない
+    name: setup venv and pip install
+    command: |
+      python -m venv .venv
+      source .venv/bin/activate
+      pip install -r requirements.txt
+
+- save_cache: # ディレクトリの内容をキャッシュとして保存
+    key: requirements-{{ checksum "requirements.txt" }}
+    paths:
+      - .venv
+```
+
+---
+
+# 基礎編はここまで
+
+身近な `circle.yml` を読んでみよう
