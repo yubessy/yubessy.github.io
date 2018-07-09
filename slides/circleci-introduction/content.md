@@ -13,7 +13,7 @@ text: text-scale(0.8), line-height(0.5)
 - 基礎編
   - CI, CD とは
   - Circle CI の構成要素
-  - 基本的な Job の使い方
+  - 基本的な Job, Step の使い方
 - 発展編
   - 高度な Job, Step の使い方
   - 高度な Workflow の使い方
@@ -45,7 +45,7 @@ text: text-scale(0.8), line-height(0.5)
 - 基礎編
   - **CI, CD とは**
   - Circle CI の構成要素
-  - 基本的な Job の使い方
+  - 基本的な Job, Step の使い方
 - 発展編
 
 ---
@@ -96,7 +96,7 @@ CI, CD をうまくやれば・・・
 - 基礎編
   - CI, CD とは
   - **Circle CI の構成要素**
-  - 基本的な Job の使い方
+  - 基本的な Job, Step の使い方
 - 発展編
 
 ---
@@ -185,7 +185,7 @@ jobs:
 - 基礎編
   - CI, CD とは
   - Circle CI の構成要素
-  - **基本的な Job の使い方**
+  - **基本的な Job, Step の使い方**
 - 発展編
 
 ---
