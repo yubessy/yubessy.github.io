@@ -168,12 +168,15 @@ jobs:
 ```yaml
 # レポジトリからコードを取得
 - checkout
+
 # コマンドを実行
 - run: <command>
+
 # コマンドを実行 (このように書くこともできる)
 - run:
     name: <name>
     command: <command>
+
 # コマンドを実行 (run とほぼ同じだが並列実行されない)
 - deploy: <command>
 ```
@@ -240,25 +243,23 @@ docker:
 
 # Step は適切に分ける
 
-Step は名前をつけやすいひとまとまりの処理
+ひとまとまりの処理ごとに Step を作って名前をつける
 
 ```yaml
 - run:
-    name: setup env
+    name: 環境構築
     command: |
       python -m venv .venv
       source .venv/bin/activate
       pip install -r requirements.txt
-
 - run:
-    name: check code statically
+    name: コードの静的解析
     command: |
       source .venv/bin/activate
       pep8 .
       pyflakes .
-
 - run:
-    name: test
+    name: テスト
     command: |
       source .venv/bin/activate
       unittest .  # test
@@ -267,6 +268,8 @@ Step は名前をつけやすいひとまとまりの処理
 ---
 
 # Step は適切に分ける
+
+粒度は荒すぎず細かすぎず、適度に決める
 
 ```yaml
 # 良くない例: 全部まとめる
@@ -279,7 +282,6 @@ Step は名前をつけやすいひとまとまりの処理
       pep8 .
       pyflakes .
       unittest .
-
 # 良くない例: 1コマンドずつ全部分ける
 - run: pip install -r requirements.txt
 - run: pep8 .
@@ -291,7 +293,7 @@ Step は名前をつけやすいひとまとまりの処理
 
 # Cache を適宜利用する
 
-ライブラリのインストールパスなどをキャッシュしておくと便利 (発展編で解説)
+ライブラリのインストールパスなどをキャッシュしておくと便利 (発展編でも紹介)
 
 ```yaml
 - restore_cache: # キャッシュあればそこからディレクトリの内容を復元
