@@ -243,9 +243,8 @@ docker:
 
 # Step は適切に分ける
 
-ひとまとまりの処理ごとに Step を作って名前をつける
-
 ```yaml
+# ひとまとまりの処理ごとに Step を作って名前をつける
 - run:
     name: 環境構築
     command: |
@@ -269,8 +268,6 @@ docker:
 
 # Step は適切に分ける
 
-粒度は荒すぎず細かすぎず、適度に決める
-
 ```yaml
 # 良くない例: 全部まとめる
 - run:
@@ -282,6 +279,7 @@ docker:
       pep8 .
       pyflakes .
       unittest .
+
 # 良くない例: 1コマンドずつ全部分ける
 - run: pip install -r requirements.txt
 - run: pep8 .
@@ -298,14 +296,12 @@ docker:
 ```yaml
 - restore_cache: # キャッシュあればそこからディレクトリの内容を復元
     key: requirements-{{ checksum "requirements.txt" }}
-
 - run: # 実行されるがディレクトリが復元されていれば実質的に何も起きない
     name: setup venv and pip install
     command: |
       python -m venv .venv
       source .venv/bin/activate
       pip install -r requirements.txt
-
 - save_cache: # ディレクトリの内容をキャッシュとして保存
     key: requirements-{{ checksum "requirements.txt" }}
     paths:
