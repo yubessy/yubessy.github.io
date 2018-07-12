@@ -4,7 +4,7 @@ text: text-scale(0.8), line-height(0.5)
 
 [.header: alignment(center)]
 
-# CircleCI 2.0
+# Introduction to CircleCI
 
 ---
 
