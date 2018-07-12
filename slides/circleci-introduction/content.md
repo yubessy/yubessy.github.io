@@ -59,7 +59,7 @@ text: text-scale(0.8), line-height(0.5)
 - CI = Continuous Integration = 継続的インテグレーション
   - リリースに至るまでのビルド・テストなどを主に扱う
 - CD = Continuous Delivery = 継続的デリバリ
-  - リリース（デプロイ・マイグレーションなど）を主に扱う
+  - リリースそのもの（デプロイ・マイグレーションなど）を主に扱う
 
 ---
 
@@ -84,7 +84,7 @@ CI, CD をうまくやれば・・・
 
 特徴:
 
-- Github の branch, tag の push を起点に処理を実行
+- Github の branch, tag の push を起点に任意の処理を実行
 - 1.0 -> 2.0 で大幅なアップデートがありほとんど別物
   - 原則としてコンテナを利用 (VMも使えないことはない)
   - 処理は言語やフレームワークに依存せず自分で書く
@@ -101,7 +101,7 @@ CI, CD をうまくやれば・・・
 
 ---
 
-# Workflow, Job, Step
+# Workflow, Job, Step: 処理の階層を成す要素
 
 一連の処理は Workflow, Job, Step の順に階層化される
 
@@ -118,7 +118,6 @@ jobs:
     steps:
       - checkout
       - run: python -m unittest
-      - ...
   deploy: ...
 ```
 
@@ -168,15 +167,12 @@ jobs:
 ```yaml
 # レポジトリからコードを取得
 - checkout
-
 # コマンドを実行
 - run: <command>
-
 # コマンドを実行 (このように書くこともできる)
 - run:
     name: <name>
     command: <command>
-
 # コマンドを実行 (run とほぼ同じだが並列実行されない)
 - deploy: <command>
 ```
@@ -241,7 +237,7 @@ docker:
 
 ---
 
-# Step は適切に分ける
+# Step を適切なまとまりで区切る
 
 ```yaml
 # ひとまとまりの処理ごとに Step を作って名前をつける
@@ -266,7 +262,7 @@ docker:
 
 ---
 
-# Step は適切に分ける
+# Step を適切なまとまりで区切る
 
 ```yaml
 # 良くない例: 全部まとめる
