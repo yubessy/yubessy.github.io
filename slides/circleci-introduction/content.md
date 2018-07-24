@@ -309,3 +309,158 @@ docker:
 # 基礎編はここまで
 
 身近な `circle.yml` を読んでみよう
+
+---
+
+[.header: alignment(center)]
+
+## 発展編
+
+---
+
+# Agenda
+
+- 基礎編
+- 発展編
+  - **高度な Job, Step の使い方**
+  - 高度な Workflow の使い方
+
+---
+
+# Workflow, Job, Step についてのおさらい
+
+- Circle CI の処理は Workflow > Job > Step に階層化される
+- Workflow: 1つ以上の Job を直列・並列・選択・分岐して実行
+- Job: 1つ以上の Step を直列実行
+- Step: 処理の最も小さい単位
+  - checkout: コードをレポジトリから取り出す
+  - run, deploy: コマンド (シェルスクリプト) を実行
+  - save_cache, restore_cache: ディレクトリをキャッシュとして保存・読込
+
+---
+
+# Job: 設定項目一覧
+
+```yaml
+jobs:
+  main:
+    docker: # 使用する Docker イメージ
+      - image: circleci/ruby:2.4.1
+    environment: # 環境変数
+      FOO: bar
+    parallelism: 2 # 並列度
+    resource_class: medium # CPU, RAM のスペック
+    working_directory: /my-app # ワーキングディレクトリ
+    branches: # ブランチフィルタ
+      only:
+        - master
+    steps: ...
+```
+
+---
+
+# Job: `parallelism` による並列化
+
+1. `parallelism` を `2` 以上にする
+2. 並列実行したい処理を `circleci tests` コマンドで並列化する
+
+```yaml
+parallelism: 2
+steps:
+  - run:
+      command: |
+        circleci tests glob "spec/**/*_spec.rb" > list.txt
+        circleci tests split list.txt | xargs bundle exec rspec
+```
+
+---
+
+# Job: `circleci tests` の解説
+
+基本的にはファイルのリストの収集と分割をするだけのコマンド
+
+```
+$ circleci tests glob "spec/**/*_spec.rb" > list.txt
+$ cat list.txt
+spec/test1_spec.rb
+spec/test2_spec.rb
+spec/test3_spec.rb
+spec/test4_spec.rb
+
+$ circleci tests split list.txt
+spec/test1_spec.rb spec/test2_spec.rb
+spec/test3_spec.rb spec/test4_spec.rb
+```
+
+---
+
+# Step: `run` の設定項目
+
+```yaml
+run:
+  name: rspec # Webコンソールに表示されるステップ名
+  command: bundle exec rspec # コマンド内容
+  shell: bash -lc # コマンドを実行するシェル
+  environment: # 環境変数
+    FOO: bar
+  working_directory: /my-app # ワーキングディレクトリ
+  background: false # バックグラウンド実行するか否か
+  no_output_timeout: 1m # 一定時間何も出力がなければタイムアウト
+  when: # (always, on_success, on_fail) どういう場合に実行するか
+```
+
+---
+
+# Step: `save_cache`, `restore_cache`
+
+(再掲)
+
+```yaml
+- restore_cache: # キャッシュあればそこからディレクトリの内容を復元
+    key: requirements-{{ checksum "requirements.txt" }}
+- run: # 実行されるがディレクトリが復元されていれば実質的に何も起きない
+    name: setup venv and pip install
+    command: |
+      python -m venv .venv
+      source .venv/bin/activate
+      pip install -r requirements.txt
+- save_cache: # ディレクトリの内容をキャッシュとして保存
+    key: requirements-{{ checksum "requirements.txt" }}
+    paths:
+      - .venv
+```
+
+---
+
+# Step: `store_artifacts`
+
+ビルドの成果物などを保存する (コンパイル言語等で使う)
+
+```yaml
+- store_artifacts:
+    path: /build/results
+    destination: /results
+```
+
+---
+
+# Step: `persist_to_workspace`, `attach_workspace`
+
+ある Job の成果物を後続の別の Job で利用する (Job が複数ある場合のみ)
+
+```yaml
+persist_to_workspace:
+  root: /tmp/dir
+  paths:
+    - foo/bar
+    - baz
+```
+
+
+
+---
+
+# 参考になる資料
+
+- [CircleCI 2.0でのスローテスト（テスト遅い）問題対処法を思いつくだけ書き出す](https://qiita.com/terrierscript/items/80dede32cc7935193b70)
+  - かなり詳しい
