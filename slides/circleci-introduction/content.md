@@ -438,8 +438,8 @@ run:
 
 ```yaml
 - store_artifacts:
-    path: /build/results
-    destination: /results
+    path: build/results
+    destination: build-results
 ```
 
 ---
@@ -450,12 +450,14 @@ run:
 
 ```yaml
 persist_to_workspace:
-  root: /tmp/dir
-  paths:
-    - foo/bar
-    - baz
+  root: build
+  paths: '*.tar.gz'
 ```
 
+```yaml
+attach_workspace:
+  at: build
+```
 
 
 ---
