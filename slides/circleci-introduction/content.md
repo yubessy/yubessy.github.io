@@ -413,7 +413,7 @@ run:
 
 # Step: `save_cache`, `restore_cache`
 
-(再掲)
+(再掲) ライブラリのインストールなどの時間を短縮
 
 ```yaml
 - restore_cache: # キャッシュあればそこからディレクトリの内容を復元
@@ -446,19 +446,166 @@ run:
 
 # Step: `persist_to_workspace`, `attach_workspace`
 
-ある Job の成果物を後続の別の Job で利用する (Job が複数ある場合のみ)
+ある Job の成果物を後続の別の Job で利用する
 
 ```yaml
 persist_to_workspace:
-  root: build
+  root: dist
   paths: '*.tar.gz'
 ```
 
 ```yaml
 attach_workspace:
-  at: build
+  at: dist
 ```
 
+**Workflow** で複数の Job を組み合わせる場合に使う
+
+---
+
+# Agenda
+
+- 基礎編
+- 発展編
+  - 高度な Job, Step の使い方
+  - **高度な Workflow の使い方**
+
+---
+
+# Workflow とは？
+
+複数の Job を組み合わせて複雑な処理フローを実現する機能
+
+- 直列実行・並列実行
+- 前の Job の成果物を利用
+- Git の branch, tag によるフィルタリング
+- Manual Approval (人による承認)
+- Nightly Scheduling (`git push` によらない定期実行)
+
+---
+
+# Workflow: 複数の Job の定義
+
+```yaml
+version: 2
+jobs:
+  build:
+    docker: ...
+    steps: ...
+  test:
+    docker: ...
+    steps: ...
+workflows:
+  version: 2
+  build-and-test:
+    jobs: # このままだと build と test は並列実行される
+      - build
+      - test
+```
+
+---
+
+# Workflow: Job の直列実行
+
+`requires` で依存する Job を指定することで直列実行できる
+
+```yaml
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test:
+          requires: # build が終わってから test を実行
+            - build
+```
+
+---
+
+# Workflow: 前の Job の成果物を利用
+
+`build` の成果物を `test` で使う = `persist_to_workspace`, `attach_workspace`
+
+```yaml
+jobs:
+  build:
+    steps:
+      - persist_to_workspace: # dist/ 以下の *.tar.gz ファイルを保存
+          root: dist
+          paths: '*.tar.gz'
+  test:
+    steps:
+      - attach_workspace: # 保存された dist/ 以下のファイルを読込
+          at: dist
+```
+
+---
+
+# Workflow: Git の branch, tag によるフィルタリング
+
+特定の名前の branch や tag の場合だけ Job を実行したい場合
+
+```yaml
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires: # test が終わってから deploy を実行
+            - test
+          filters:
+            branches: # master の場合のみ deploy を実行
+              only: /^master$/ # 正規表現
+```
+
+---
+
+# Workflow: Manual Approval
+
+人による承認ステップを挟む
+
+```yaml
+workflows:
+  version: 2
+  lint-and-test:
+    jobs:
+      - lint # lint は毎回実行
+      - approve-test: # test に進むことを手動で承認
+          type: approval
+          requires:
+            - lint
+      - test: # test は時間がかかるので承認を必要にする
+          requires:
+            - approve-test
+```
+
+---
+
+# Workflow: Nightly Scheduling
+
+特定の Workflow を定期的に実行
+
+```yaml
+workflows:
+  version: 2
+  health:
+    triggers:
+      - schedule: # 毎日 00:00 に実行
+          cron: "0 0 * * *"
+    jobs: # 脆弱性のチェックなど
+      - check-vulnerability
+```
+
+---
+
+# まとめ
+
+Workflow を使うととにかく色々なことができるが...
+
+Workflow 自体の動作は自動テストできないので、複雑なものを作りすぎないこと
+
+参考になる Workflow を探してみよう
 
 ---
 
