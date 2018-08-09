@@ -343,7 +343,7 @@ docker:
 
 ```yaml
 jobs:
-  main:
+  build:
     docker: # 使用する Docker イメージ
       - image: circleci/ruby:2.4.1
     environment: # 環境変数
@@ -611,5 +611,6 @@ Workflow 自体の動作は自動テストできないので、複雑なもの�
 
 # 参考になる資料
 
+- [CircleCI2.0のWorkflowを試してみる](https://qiita.com/sawadashota/items/ba89382d563bc90bb5cd)
 - [CircleCI 2.0でのスローテスト（テスト遅い）問題対処法を思いつくだけ書き出す](https://qiita.com/terrierscript/items/80dede32cc7935193b70)
-  - かなり詳しい
+- [CircleCI 2.0 をlocalで動かす](https://qiita.com/selmertsx/items/45bd672c2c8ddab1981b)
