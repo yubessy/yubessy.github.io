@@ -12,8 +12,6 @@
 
 ---
 
-#### Designing Data-Intensive Applications
-
 # <img src="ddia.png" style="width: 50%;" />
 
 ---
@@ -36,7 +34,7 @@ https://takuti.me/note/designing-data-intensive-applications/
 
 ---
 
-### 目次
+#### 目次
 
 - Part 1. Foundations of Data Systems
   - Chapter 1. Reliable, Scalable, and Maintainable Applications
@@ -46,7 +44,7 @@ https://takuti.me/note/designing-data-intensive-applications/
 
 ---
 
-### 目次
+#### 目次
 
 - Part 2. Distributed Data
   - Chapter 5. Replication
@@ -57,7 +55,7 @@ https://takuti.me/note/designing-data-intensive-applications/
 
 ---
 
-### 目次
+#### 目次
 
 - Part 3. Derived Data
   - Chapter 10. Batch Processing
@@ -66,7 +64,7 @@ https://takuti.me/note/designing-data-intensive-applications/
 
 ---
 
-### 良いところ
+## 良いところ
 
 1. アプリケーション開発者向けの内容である
 2. 最もシンプルな実装から解説を始める
@@ -84,8 +82,8 @@ DBMSや分散処理フレームワークの開発者ではなく
 
 - カラムが多く頻繁に変更されるようなデータでは
   本当にNoSQLを使ったほうが良いか？
-- 大量のログをストレージに保存したいとき
-  行志向・列志向のどちらの形式にすべきか？
+- 大量のログを分析のために保存しておきたいとき
+  どんなデータストアやフォーマットが良いか？
 
 ---
 
@@ -155,7 +153,11 @@ $ db_get 123456
 
 ---
 
-### 読んだ部分
+#### 複数の技術を比較しながら議論する
+
+---
+
+#### ちなみに: 自分の読み方
 
 1 → 3 → 2 の順に読み進めている (今 3 の半分くらい)
 
@@ -170,5 +172,21 @@ $ db_get 123456
 
 ---
 
-# DDIA はいいぞ
+## まとめ
+
+現代において、単一のDBMSだけで済ませられる
+アプリケーションはほぼない
+
+メインのDBに加えてキャッシュ・検索エンジン・
+分析基盤など様々なデータシステムを利用
+
+巷にあふれるバズワードにまどわされず、目的に
+即した技術選択をするには、体系的な知識が必要
+
+**→ DDIAはいいぞ**
+
+
+
+
+
 
