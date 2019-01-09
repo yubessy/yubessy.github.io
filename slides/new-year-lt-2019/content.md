@@ -92,12 +92,13 @@ DBMSや分散処理フレームワークの開発者ではなく
 #### Designing Applications
 
 - アプリケーション設計のための本である
-- 技術作る側ではなく、使う側の視点に立つ
+- 各技術の特徴を、利用する側の視点から解説
 
 #### Data-Intensive
 
-- データに
-- ↔ Computing-Intensive
+- ↔ Compute-Intensive
+- データの量・複雑さ・処理速度がキモになる
+- そのために高度な技術が必要とされる
 
 ---
 
@@ -136,7 +137,7 @@ $ db_get 123456
 {"name":"London"}
 ```
 
-ここからcompactionやindexingの概念が導入される
+ここにindexingやcompactionの概念を導入してゆく
 
 ---
 
@@ -148,12 +149,23 @@ $ db_get 123456
 → 自分のアプリケーションの用途に照らして
 技術選択において抑えるべきポイントがわかる
 
-- OLTP vs. OLAP
-- 
+- リレーショナルモデルとドキュメントモデルは
+  どう違うか？どう使い分けるべきか？
+- 少数レコードのトランザクションと、大量
+  レコードの集計では、技術的要求はどう異なる？
 
 ---
 
-#### 複数の技術を比較しながら議論する
+比較されるさまざまな技術・概念
+
+- Data modeling: relational vs. document
+- Processing: transaction vs. analytics
+- Index: primary vs. secondary
+- Storage: row-oriented vs. column-oriented
+- Encoding: text vs. binary
+- Replication: synchronous vs. asynchronous
+- Partition: static vs. dynamic
+- ...
 
 ---
 
