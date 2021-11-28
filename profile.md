@@ -1,13 +1,12 @@
+layout: page
+title: Profile
+
 # Shotaro Tanaka a.k.a. yubessy
 
 I'm a programmer living in Japan.
 My interests are data engineering, machine learning, information retrieval and data mining.
 
 He/him
-
-## Developer accounts
-
-[GitHub](https://github.com/yubessy) / [Speaker Deck](https://speakerdeck.com/yubessy) / [Qiita](https://qiita.com/yubessy) / [LAPRAS](https://lapras.com/public/CJ7SGY2)
 
 ## Experiences
 
