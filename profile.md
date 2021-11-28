@@ -1,7 +1,6 @@
-layout: page
-title: Profile
+# Profile
 
-# Shotaro Tanaka a.k.a. yubessy
+## Shotaro Tanaka a.k.a. yubessy
 
 I'm a programmer living in Japan.
 My interests are data engineering, machine learning, information retrieval and data mining.
